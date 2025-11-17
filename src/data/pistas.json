@@ -3,8 +3,8 @@
     "id": 1,
     "title": "Pista 1",
     "description": "Busca el gran árbol solitario.",
-    "lat": 41.686016,
-    "lon": 2.364657,
+    "lat": 41.686072,
+    "lon": 2.36453,
     "radius": 12,
     "audio": "pista1.mp3",
     "image": "star.png"
