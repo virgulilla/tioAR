@@ -1,189 +1,164 @@
 import React, { useEffect, useState } from "react";
 
-const CLUES = [
+const PISTAS = [
   {
     id: 1,
-    title: "Pista 1",
-    lat: 41.6710656,
-    lon: 2.3724032,
-    radius: 50000000, // metros
-    model: "/models/star.glb",
-    audio: "/audio/p1.mp3",
+    lat: 41.387,
+    lon: 2.169,
+    radius: 50,
+    letter: "H",
+    acertijo:
+      "Soy amarillo y me gusta el sol. Salgo en el campo y a veces en la ensalada. ¿Qué soy?",
+    respuesta: "huevo",
+  },
+  {
+    id: 2,
+    lat: 41.388,
+    lon: 2.17,
+    radius: 50,
+    letter: "U",
+    acertijo:
+      "Une la imagen con su sombra correcta. Es un mini juego de unir. (Escribe la letra correcta: U)",
+    respuesta: "u",
+  },
+  {
+    id: 3,
+    lat: 41.389,
+    lon: 2.171,
+    radius: 50,
+    letter: "E",
+    acertijo: "Tengo 3 manzanas y me dan 2 más. ¿Cuántas tengo?",
+    respuesta: "5",
+  },
+  {
+    id: 4,
+    lat: 41.39,
+    lon: 2.172,
+    radius: 50,
+    letter: "R",
+    acertijo:
+      "Guía al conejito por el laberinto a la zanahoria. (Responde con R)",
+    respuesta: "r",
+  },
+  {
+    id: 5,
+    lat: 41.391,
+    lon: 2.173,
+    radius: 50,
+    letter: "T",
+    acertijo:
+      "Encuentra la palabra oculta en la sopa de letras. (Responde con T)",
+    respuesta: "t",
+  },
+  {
+    id: 6,
+    lat: 41.392,
+    lon: 2.174,
+    radius: 50,
+    letter: "O",
+    acertijo: "Juego de memoria con frutas. (Responde con O)",
+    respuesta: "o",
   },
 ];
 
-function haversine(lat1, lon1, lat2, lon2) {
+function distanceMeters(lat1, lon1, lat2, lon2) {
+  const toRad = (deg) => (deg * Math.PI) / 180;
   const R = 6371000;
-  const toRad = (d) => (d * Math.PI) / 180;
   const dLat = toRad(lat2 - lat1);
   const dLon = toRad(lon2 - lon1);
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return Math.round(R * c);
 }
 
 export default function App() {
-  const [geo, setGeo] = useState(null);
-  const [heading, setHeading] = useState(0);
-  const [activeClue, setActiveClue] = useState(null);
-  const [mode, setMode] = useState("radar"); // radar | ar
+  const [position, setPosition] = useState(null);
+  const [activePista, setActivePista] = useState(null);
+  const [letters, setLetters] = useState([]);
+  const [input, setInput] = useState("");
 
-  // Geolocalización + orientación
   useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.watchPosition(
-        (pos) => {
-          setGeo({
-            lat: pos.coords.latitude,
-            lon: pos.coords.longitude,
-          });
-        },
-        console.error,
-        { enableHighAccuracy: true }
-      );
-    }
-
-    if (window.DeviceOrientationEvent) {
-      window.addEventListener("deviceorientation", (e) => {
-        if (e.alpha != null) {
-          setHeading(e.alpha);
-        }
-      });
-    }
+    if (!("geolocation" in navigator)) return alert("Geo no disponible");
+    const watchId = navigator.geolocation.watchPosition((pos) => {
+      setPosition({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+    });
+    return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
-  // Activar pista automáticamente
   useEffect(() => {
-    if (!geo) return;
-    const c = CLUES[0];
-    const dist = haversine(geo.lat, geo.lon, c.lat, c.lon);
+    if (!position) return;
+    if (letters.length >= PISTAS.length) return;
+    const next = PISTAS.find((p) => !letters.includes(p.letter));
+    if (!next) return;
+    const d = distanceMeters(position.lat, position.lon, next.lat, next.lon);
+    if (d <= next.radius) setActivePista(next);
+  }, [position, letters]);
 
-    if (dist < c.radius) {
-      setActiveClue(c);
-      setMode("ar");
-    }
-  }, [geo]);
-
-  function getBearing(lat1, lon1, lat2, lon2) {
-    const toRad = (x) => (x * Math.PI) / 180;
-    const toDeg = (x) => (x * 180) / Math.PI;
-    const dLon = toRad(lon2 - lon1);
-    const y = Math.sin(dLon) * Math.cos(toRad(lat2));
-    const x =
-      Math.cos(toRad(lat1)) * Math.sin(toRad(lat2)) -
-      Math.sin(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(dLon);
-    return (toDeg(Math.atan2(y, x)) + 360) % 360;
-  }
-
-  function arrowRotation() {
-    if (!geo) return 0;
-    const c = CLUES[0];
-    const bearing = getBearing(geo.lat, geo.lon, c.lat, c.lon);
-    return bearing - heading;
-  }
-
-  // --- PANTALLA AR ---
-  if (mode === "ar" && activeClue) {
-    return (
-      <div style={{ position: "fixed", inset: 0 }}>
-        <a-scene
-          embedded
-          vr-mode-ui="enabled: false"
-          renderer="logarithmicDepthBuffer: true;"
-          arjs="sourceType: webcam; trackingMethod: gps; debugUIEnabled: false;"
-          style={{
-            width: "100vw",
-            height: "100vh",
-            position: "absolute",
-            top: 0,
-            left: 0,
-          }}
-        >
-          <a-entity camera gps-camera rotation-reader></a-entity>
-
-          {/* Iluminación */}
-          <a-light type="ambient" color="#ffffff" intensity="0.6"></a-light>
-          <a-light
-            type="directional"
-            color="#ffffff"
-            intensity="0.8"
-            position="0 10 5"
-          ></a-light>
-
-          {/* Modelo GPS */}
-          <a-entity
-            gps-entity-place={`latitude: ${activeClue.lat}; longitude: ${activeClue.lon}`}
-            scale="3 3 3"
-            rotation="0 180 0"
-          >
-            <a-gltf-model
-              src={activeClue.model}
-              animation-mixer
-              position="0 0 0"
-            ></a-gltf-model>
-          </a-entity>
-        </a-scene>
-
-        <button
-          style={{
-            position: "absolute",
-            top: 20,
-            left: 20,
-            padding: "10px 15px",
-            borderRadius: 8,
-            background: "#fff",
-            zIndex: 10,
-          }}
-          onClick={() => setMode("radar")}
-        >
-          Volver
-        </button>
-      </div>
-    );
-  }
-
-  // --- PANTALLA RADAR ---
-  const dist = geo
-    ? Math.round(haversine(geo.lat, geo.lon, CLUES[0].lat, CLUES[0].lon))
-    : "---";
+  const checkRespuesta = () => {
+    if (!activePista) return;
+    if (input.trim().toLowerCase() === activePista.respuesta.toLowerCase()) {
+      setLetters([...letters, activePista.letter]);
+      setInput("");
+      setActivePista(null);
+    } else alert("Intenta de nuevo!");
+  };
 
   return (
-    <div style={{ padding: 20, textAlign: "center", fontFamily: "sans-serif" }}>
-      <h2>Radar del Tió</h2>
-      <div style={{ fontSize: 20 }}>Distancia: {dist} m</div>
+    <div className="app">
+      <h1>Radar del Tió - HUERTO</h1>
+      {letters.length < PISTAS.length && (
+        <div className="radar">
+          <div>
+            Posición:{" "}
+            {position
+              ? `${position.lat.toFixed(5)}, ${position.lon.toFixed(5)}`
+              : "Esperando geo..."}
+          </div>
+          <div>
+            Pistas encontradas: {letters.length} / {PISTAS.length}
+          </div>
+          {activePista && (
+            <div style={{ marginTop: 8 }}>¡Estás cerca de una pista! 🎉</div>
+          )}
+        </div>
+      )}
 
-      <div
-        style={{
-          margin: "30px auto",
-          width: 230,
-          height: 230,
-          borderRadius: "50%",
-          border: "8px solid #0aa",
-          background: "#e9ffff",
-          position: "relative",
-          boxShadow: "0 0 20px rgba(0,150,150,0.4)",
-        }}
-      >
-        <div
-          style={{
-            width: 0,
-            height: 0,
-            borderLeft: "40px solid transparent",
-            borderRight: "40px solid transparent",
-            borderBottom: "80px solid #ff4444",
-            filter: "drop-shadow(0 0 6px #ff8888)",
-            position: "absolute",
-            left: "50%",
-            top: "50%",
-            transform: `translate(-50%, -100%) rotate(${arrowRotation()}deg)`,
-          }}
-        ></div>
-      </div>
+      {activePista && (
+        <div className="acertijo">
+          <div>
+            <strong>Acertijo:</strong> {activePista.acertijo}
+          </div>
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Escribe tu respuesta"
+            style={{
+              marginTop: 8,
+              padding: 8,
+              width: "100%",
+              borderRadius: 8,
+              border: "1px solid #ccc",
+            }}
+          />
+          <button onClick={checkRespuesta}>Comprobar</button>
+        </div>
+      )}
 
-      <div style={{ marginTop: 20, fontSize: 16 }}>
-        Sigue la flecha para encontrar la pista.
-      </div>
+      {letters.length === PISTAS.length && (
+        <div className="acertijo">
+          <h2>¡Felicidades! 🎄</h2>
+          <div>Has encontrado todas las letras: {letters.join("")}</div>
+          <div>
+            La palabra es <strong>HUERTO</strong> y allí está escondido el Tió!
+          </div>
+        </div>
+      )}
+
+      {letters.length > 0 && (
+        <div className="letter">Letras encontradas: {letters.join(" ")}</div>
+      )}
     </div>
   );
 }
