@@ -1,4 +1,4 @@
-// Versión definitiva con radar que se oculta al activar la pista y vuelve al resolver el acertijo
+// Versión final mejorada: Radar con flecha orientada, distancia resaltada, y acertijos con input para niños (5-8 años)
 
 import React, { useEffect, useState } from "react";
 
@@ -99,16 +99,13 @@ export default function App() {
       return alert("Geolocalización no disponible");
     const watchId = navigator.geolocation.watchPosition(
       (pos) => {
-        const posObj = { lat: pos.coords.latitude, lon: pos.coords.longitude };
-        setPosition(posObj);
-        const nextPista = PISTAS.find((p) => !letters.includes(p.letter));
-        if (nextPista)
-          setDistance(
-            distanceMeters(posObj.lat, posObj.lon, nextPista.lat, nextPista.lon)
-          );
+        setPosition({ lat: pos.coords.latitude, lon: pos.coords.longitude });
       },
-      (err) => console.error(err),
-      { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
+      (err) => {
+        if (err.code === 3) console.warn("GPS lento, intentando aproximado");
+        console.error(err);
+      },
+      { enableHighAccuracy: true, maximumAge: 10000, timeout: 30000 }
     );
     return () => navigator.geolocation.clearWatch(watchId);
   }, [letters]);
@@ -157,11 +154,18 @@ export default function App() {
       {/* Radar solo si no hay pista activa */}
       {position && letters.length < PISTAS.length && !activePista && (
         <div style={{ marginTop: 20, textAlign: "center" }}>
-          <div>
-            {distance !== null
-              ? `Faltan ${distance} metros para la siguiente pista`
-              : "Esperando ubicación..."}
-          </div>
+          {distance !== null && (
+            <div
+              style={{
+                fontSize: 36,
+                fontWeight: "bold",
+                color: "#ff5a5f",
+                marginBottom: 12,
+              }}
+            >
+              Faltan {distance} metros
+            </div>
+          )}
           <div>
             Pistas encontradas: {letters.length} / {PISTAS.length}
           </div>
@@ -183,7 +187,7 @@ export default function App() {
               x2={150 + 120 * Math.sin((angle * Math.PI) / 180)}
               y2={150 - 120 * Math.cos((angle * Math.PI) / 180)}
               stroke="orange"
-              strokeWidth={8}
+              strokeWidth={10}
               strokeLinecap="round"
             />
           </svg>
@@ -204,22 +208,36 @@ export default function App() {
             boxShadow: "0 6px 12px rgba(0,0,0,0.1)",
           }}
         >
-          <div>
+          <div style={{ fontSize: 20, marginBottom: 12 }}>
             <strong>Acertijo:</strong> {activePista.acertijo}
           </div>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Escribe tu respuesta"
+            placeholder="Escribe tu respuesta aquí"
             style={{
               marginTop: 8,
-              padding: 8,
+              padding: 12,
               width: "100%",
               borderRadius: 8,
-              border: "1px solid #ccc",
+              border: "2px solid #ccc",
+              fontSize: 18,
             }}
           />
-          <button onClick={checkRespuesta}>Comprobar</button>
+          <button
+            onClick={checkRespuesta}
+            style={{
+              marginTop: 8,
+              padding: "10px 16px",
+              fontSize: 18,
+              borderRadius: 8,
+              background: "#ff5a5f",
+              color: "#fff",
+              fontWeight: "bold",
+            }}
+          >
+            Comprobar
+          </button>
         </div>
       )}
 
