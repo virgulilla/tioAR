@@ -4,9 +4,9 @@ const CLUES = [
   {
     id: 1,
     title: "Pista 1",
-    lat: 41.387,
-    lon: 2.169,
-    radius: 500000000, // en metros, ajusta según tu necesidad
+    lat: 41.6710656,
+    lon: 2.3724032,
+    radius: 50000000, // metros
     model: "/models/star.glb",
     audio: "/audio/p1.mp3",
   },
@@ -92,11 +92,17 @@ export default function App() {
           vr-mode-ui="enabled: false"
           renderer="logarithmicDepthBuffer: true;"
           arjs="sourceType: webcam; trackingMethod: gps; debugUIEnabled: false;"
-          style={{ width: "100vw", height: "100vh" }}
+          style={{
+            width: "100vw",
+            height: "100vh",
+            position: "absolute",
+            top: 0,
+            left: 0,
+          }}
         >
           <a-entity camera gps-camera rotation-reader></a-entity>
 
-          {/* LUCES */}
+          {/* Iluminación */}
           <a-light type="ambient" color="#ffffff" intensity="0.6"></a-light>
           <a-light
             type="directional"
@@ -127,6 +133,7 @@ export default function App() {
             padding: "10px 15px",
             borderRadius: 8,
             background: "#fff",
+            zIndex: 10,
           }}
           onClick={() => setMode("radar")}
         >
