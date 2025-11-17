@@ -5,7 +5,7 @@
     "description": "¡Cerca del gran árbol! Busca la estrella escondida entre las ramas.",
     "lat": 41.686072,
     "lon": 2.36453,
-    "radius": 12,
+    "radius": 120000000000000000000,
     "ar": "star"
   },
   {
