@@ -1,7 +1,7 @@
 // MapView.jsx
 import React, { useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useGeoPosition from "../hooks/useGeoPosition";
+import useGeoPosition from "../hooks/useGeolocalizacion";
 import { haversineDistance, bearingDegrees } from "../hooks/useDistance";
 import pistas from "../data/pistas";
 
