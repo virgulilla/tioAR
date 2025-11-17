@@ -69,7 +69,7 @@ export default function ARView() {
       <a-scene
         embedded
         arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
-        renderer="antialias: true;"
+        renderer="antialias: true; alpha: true;"
       >
         {/* luz y cámara */}
         <a-entity light="type: ambient; intensity: 0.9"></a-entity>
