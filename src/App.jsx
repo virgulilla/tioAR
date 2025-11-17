@@ -1,11 +1,13 @@
+// Versión definitiva con radar que se oculta al activar la pista y vuelve al resolver el acertijo
+
 import React, { useEffect, useState } from "react";
 
 const PISTAS = [
   {
     id: 1,
-    lat: 41.387,
-    lon: 2.169,
-    radius: 50,
+    lat: 41.6710656,
+    lon: 2.3724032,
+    radius: 20,
     letter: "H",
     acertijo:
       "Soy amarillo y me gusta el sol. Salgo en el campo y a veces en la ensalada. ¿Qué soy?",
@@ -13,12 +15,11 @@ const PISTAS = [
   },
   {
     id: 2,
-    lat: 41.388,
-    lon: 2.17,
-    radius: 50,
+    lat: 41.6710657,
+    lon: 2.3724033,
+    radius: 20,
     letter: "U",
-    acertijo:
-      "Une la imagen con su sombra correcta. Es un mini juego de unir. (Escribe la letra correcta: U)",
+    acertijo: "Une la imagen con su sombra correcta. (Escribe la letra U)",
     respuesta: "u",
   },
   {
@@ -73,27 +74,55 @@ function distanceMeters(lat1, lon1, lat2, lon2) {
   return Math.round(R * c);
 }
 
+function angleToTarget(lat1, lon1, lat2, lon2) {
+  const toRad = (deg) => (deg * Math.PI) / 180;
+  const toDeg = (rad) => (rad * 180) / Math.PI;
+  const dLon = toRad(lon2 - lon1);
+  const y = Math.sin(dLon) * Math.cos(toRad(lat2));
+  const x =
+    Math.cos(toRad(lat1)) * Math.sin(toRad(lat2)) -
+    Math.sin(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(dLon);
+  let brng = toDeg(Math.atan2(y, x));
+  brng = (brng + 360) % 360;
+  return brng;
+}
+
 export default function App() {
   const [position, setPosition] = useState(null);
   const [activePista, setActivePista] = useState(null);
   const [letters, setLetters] = useState([]);
   const [input, setInput] = useState("");
+  const [distance, setDistance] = useState(null);
 
   useEffect(() => {
-    if (!("geolocation" in navigator)) return alert("Geo no disponible");
-    const watchId = navigator.geolocation.watchPosition((pos) => {
-      setPosition({ lat: pos.coords.latitude, lon: pos.coords.longitude });
-    });
+    if (!("geolocation" in navigator))
+      return alert("Geolocalización no disponible");
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        const posObj = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+        setPosition(posObj);
+        const nextPista = PISTAS.find((p) => !letters.includes(p.letter));
+        if (nextPista)
+          setDistance(
+            distanceMeters(posObj.lat, posObj.lon, nextPista.lat, nextPista.lon)
+          );
+      },
+      (err) => console.error(err),
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
+    );
     return () => navigator.geolocation.clearWatch(watchId);
-  }, []);
+  }, [letters]);
 
   useEffect(() => {
     if (!position) return;
     if (letters.length >= PISTAS.length) return;
     const next = PISTAS.find((p) => !letters.includes(p.letter));
     if (!next) return;
-    const d = distanceMeters(position.lat, position.lon, next.lat, next.lon);
-    if (d <= next.radius) setActivePista(next);
+    if (
+      distanceMeters(position.lat, position.lon, next.lat, next.lon) <=
+      next.radius
+    )
+      setActivePista(next);
   }, [position, letters]);
 
   const checkRespuesta = () => {
@@ -102,31 +131,79 @@ export default function App() {
       setLetters([...letters, activePista.letter]);
       setInput("");
       setActivePista(null);
+      setDistance(null);
     } else alert("Intenta de nuevo!");
   };
 
+  const nextPista = PISTAS.find((p) => !letters.includes(p.letter));
+  const angle =
+    position && nextPista
+      ? angleToTarget(position.lat, position.lon, nextPista.lat, nextPista.lon)
+      : 0;
+
   return (
-    <div className="app">
-      <h1>Radar del Tió - HUERTO</h1>
-      {letters.length < PISTAS.length && (
-        <div className="radar">
+    <div
+      style={{
+        maxWidth: 600,
+        margin: "auto",
+        padding: 12,
+        fontFamily: "Arial",
+        background: "#fff7f0",
+        minHeight: "100vh",
+      }}
+    >
+      <h1 style={{ color: "#ff5a5f" }}>Radar del Tió - HUERTO</h1>
+
+      {/* Radar solo si no hay pista activa */}
+      {position && letters.length < PISTAS.length && !activePista && (
+        <div style={{ marginTop: 20, textAlign: "center" }}>
           <div>
-            Posición:{" "}
-            {position
-              ? `${position.lat.toFixed(5)}, ${position.lon.toFixed(5)}`
-              : "Esperando geo..."}
+            {distance !== null
+              ? `Faltan ${distance} metros para la siguiente pista`
+              : "Esperando ubicación..."}
           </div>
           <div>
             Pistas encontradas: {letters.length} / {PISTAS.length}
           </div>
-          {activePista && (
-            <div style={{ marginTop: 8 }}>¡Estás cerca de una pista! 🎉</div>
-          )}
+          <svg
+            width={300}
+            height={300}
+            style={{
+              background: "#e0f7ff",
+              borderRadius: "50%",
+              border: "4px solid #ccc",
+              marginTop: 12,
+            }}
+          >
+            <circle cx={150} cy={150} r={140} fill="#cfefff" />
+            <circle cx={150} cy={150} r={10} fill="#ff5a5f" />
+            <line
+              x1={150}
+              y1={150}
+              x2={150 + 120 * Math.sin((angle * Math.PI) / 180)}
+              y2={150 - 120 * Math.cos((angle * Math.PI) / 180)}
+              stroke="orange"
+              strokeWidth={8}
+              strokeLinecap="round"
+            />
+          </svg>
+          <div style={{ marginTop: 8, fontWeight: 700 }}>
+            Sigue la flecha hacia la siguiente pista!
+          </div>
         </div>
       )}
 
+      {/* Acertijo: solo cuando se activa la pista */}
       {activePista && (
-        <div className="acertijo">
+        <div
+          style={{
+            marginTop: 20,
+            padding: 12,
+            background: "#fff",
+            borderRadius: 12,
+            boxShadow: "0 6px 12px rgba(0,0,0,0.1)",
+          }}
+        >
           <div>
             <strong>Acertijo:</strong> {activePista.acertijo}
           </div>
@@ -146,18 +223,39 @@ export default function App() {
         </div>
       )}
 
+      {/* Letras acumuladas */}
+      {letters.length > 0 && (
+        <div
+          style={{
+            marginTop: 12,
+            fontSize: 32,
+            fontWeight: 700,
+            color: "#ff5a5f",
+            textAlign: "center",
+          }}
+        >
+          Letras encontradas: {letters.join(" ")}
+        </div>
+      )}
+
+      {/* Pantalla final */}
       {letters.length === PISTAS.length && (
-        <div className="acertijo">
+        <div
+          style={{
+            marginTop: 12,
+            padding: 12,
+            background: "#fff",
+            borderRadius: 12,
+            boxShadow: "0 6px 12px rgba(0,0,0,0.1)",
+            textAlign: "center",
+          }}
+        >
           <h2>¡Felicidades! 🎄</h2>
           <div>Has encontrado todas las letras: {letters.join("")}</div>
           <div>
             La palabra es <strong>HUERTO</strong> y allí está escondido el Tió!
           </div>
         </div>
-      )}
-
-      {letters.length > 0 && (
-        <div className="letter">Letras encontradas: {letters.join(" ")}</div>
       )}
     </div>
   );
