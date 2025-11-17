@@ -1,24 +1,79 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Búsqueda del Tío de Nadal</title>
-
-    <!-- Fuentes amigables para niños -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap"
-      rel="stylesheet"
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
 
-    <!-- A-Frame + AR.js -->
-    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js"></script>
+    <!-- AFRAME -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
 
-    <meta name="theme-color" content="#7dd3fc" />
+    <!-- AR.js con soporte de geolocalización -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      #statusPanel {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-size: 18px;
+      }
+    </style>
   </head>
+
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <!-- STATUS UI -->
+    <div id="statusPanel">Cargando GPS...</div>
+
+    <!-- ESCENA AR -->
+    <a-scene
+      vr-mode-ui="enabled: false"
+      embedded
+      renderer="antialias: true; alpha: true;"
+      arjs="sourceType: webcam; 
+            videoTexture: true; 
+            debugUIEnabled: false;"
+    >
+      <!-- Cámara con GPS -->
+      <a-camera gps-camera rotation-reader></a-camera>
+
+      <!-- ENTIDAD APARECERÁ EN LAT/LON REAL -->
+      <a-entity
+        id="pista1"
+        gps-entity-place="latitude: 41.6710656; longitude: 2.3724032"
+        gltf-model="model.glb"
+        scale="2 2 2"
+        position="0 0 0"
+      >
+      </a-entity>
+    </a-scene>
+
+    <script>
+      const status = document.getElementById("statusPanel");
+
+      window.onload = () => {
+        status.innerText = "Obteniendo posición...";
+      };
+
+      // evento de GPS listo
+      window.addEventListener("gps-camera-update-position", (e) => {
+        status.innerText = "GPS activo ✓";
+
+        const userLat = e.detail.position.latitude;
+        const userLon = e.detail.position.longitude;
+
+        console.log("Tu posición:", userLat, userLon);
+      });
+    </script>
   </body>
 </html>
