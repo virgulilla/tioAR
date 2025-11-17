@@ -6,93 +6,32 @@ import pistas from "../data/pistas.json";
  * AR primitives por pista (puedes sustituir por modelos GLB en public/models/)
  */
 function ARContent({ kind }) {
-  switch (kind) {
-    case "star":
-      return (
-        <a-entity position="0 0 -1">
-          <a-octahedron
-            radius="0.35"
-            color="#f59e0b"
-            segments="0"
-            rotation="0 45 0"
-          ></a-octahedron>
-        </a-entity>
-      );
-    case "chest":
-      return (
-        <a-entity position="0 0 -1">
-          <a-box
-            color="#b7791f"
-            depth="0.5"
-            height="0.35"
-            width="0.7"
-            position="0 0.2 0"
-          ></a-box>
-        </a-entity>
-      );
-    case "bear":
-      return (
-        <a-entity position="0 0 -1">
-          <a-sphere radius="0.35" color="#fca5a5" position="0 0.2 0"></a-sphere>
-        </a-entity>
-      );
-    case "fountain":
-      return (
-        <a-entity position="0 0 -1">
-          <a-cylinder radius="0.5" height="0.2" color="#60a5fa"></a-cylinder>
-          <a-torus radius="0.25" position="0 0.6 0" color="#fff"></a-torus>
-        </a-entity>
-      );
-    case "balloon":
-      return (
-        <a-entity position="0 0 -1">
-          <a-sphere radius="0.4" color="#fb7185" position="0 0.6 0"></a-sphere>
-        </a-entity>
-      );
-    case "key":
-      return (
-        <a-entity position="0 0 -1">
-          <a-cylinder
-            radius="0.08"
-            height="0.6"
-            color="#fde047"
-            rotation="0 0 45"
-          ></a-cylinder>
-        </a-entity>
-      );
-    case "rocket":
-      return (
-        <a-entity position="0 0 -1">
-          <a-cone radius-bottom="0.2" height="0.6" color="#7c3aed"></a-cone>
-        </a-entity>
-      );
-    case "uncle":
-      // final: un personaje simple (caja+cabeza)
-      return (
-        <a-entity position="0 0 -1">
-          <a-box
-            depth="0.5"
-            height="0.6"
-            width="0.4"
-            color="#fde68a"
-            position="0 0.3 0"
-          ></a-box>
-          <a-sphere radius="0.22" color="#fef3c7" position="0 0.9 0"></a-sphere>
-          <a-text
-            value="¡Hola campeones!"
-            align="center"
-            position="0 1.4 0"
-            color="#0f172a"
-          ></a-text>
-        </a-entity>
-      );
-    default:
-      return (
-        <a-entity position="0 0 -1">
-          <a-box color="#06b6d4" depth="0.4" height="0.4" width="0.4"></a-box>
-        </a-entity>
-      );
+  const modelMap = {
+    star: "/models/star.glb",
+    chest: "/models/chest.glb",
+    bear: "/models/bear.glb",
+    fountain: "/models/fountain.glb",
+    balloon: "/models/balloon.glb",
+    key: "/models/key.glb",
+    rocket: "/models/rocket.glb",
+    uncle: "/models/uncle.glb",
+  };
+  const src = modelMap[kind] || null;
+  if (!src) {
+    return (
+      <a-entity position="0 0 -1">
+        <a-box color="#06b6d4"></a-box>
+      </a-entity>
+    );
   }
+  return (
+    <a-entity
+      gltf-model={`url(${src})`}
+      position="0 0 -1"
+      scale="0.8 0.8 0.8"
+      animation="property: rotation; to: 0 360 0; loop: true; dur: 6000; easing: linear"
+    ></a-entity>
+  );
 }
 
 export default function ARView() {
@@ -111,7 +50,6 @@ export default function ARView() {
       /* empty */
     }
   }, [pistaId]);
-
   if (!pista)
     return (
       <div className="app-shell">
