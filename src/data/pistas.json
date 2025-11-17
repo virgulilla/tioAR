@@ -1,82 +1,74 @@
 [
   {
     "id": 1,
-    "title": "Pista 1",
-    "description": "Busca el gran árbol solitario.",
+    "title": "La Maravillosa Estrella",
+    "description": "¡Cerca del gran árbol! Busca la estrella escondida entre las ramas.",
     "lat": 41.686072,
     "lon": 2.36453,
     "radius": 12,
-    "audio": "pista1.mp3",
-    "image": "star.png"
+    "ar": "star"
   },
   {
     "id": 2,
-    "title": "Pista 2",
-    "description": "Cerca del banco de piedra.",
+    "title": "El Cofre Brillante",
+    "description": "Junto al banco de piedra. Abre el cofre con tu sonrisa.",
     "lat": 41.40355,
     "lon": 2.17447,
     "radius": 12,
-    "audio": "pista2.mp3",
-    "image": "tree.png"
+    "ar": "chest"
   },
   {
     "id": 3,
-    "title": "Pista 3",
-    "description": "Donde el sendero hace una curva.",
+    "title": "El Osito Travieso",
+    "description": "Donde el sendero curva. El osito dejó una nota.",
     "lat": 41.40368,
     "lon": 2.17452,
     "radius": 12,
-    "audio": "pista3.mp3",
-    "image": "ball.png"
+    "ar": "bear"
   },
   {
     "id": 4,
-    "title": "Pista 4",
-    "description": "Junto a la fuente pequeña.",
+    "title": "La Fuente Cantora",
+    "description": "Escucha el murmullo del agua — ahí hay una pista.",
     "lat": 41.40372,
     "lon": 2.17442,
     "radius": 12,
-    "audio": "pista4.mp3",
-    "image": "rocket.png"
+    "ar": "fountain"
   },
   {
     "id": 5,
-    "title": "Pista 5",
-    "description": "Cerca de los arbustos redondos.",
+    "title": "Los Arbustos Juguetones",
+    "description": "Busca entre los arbustos redondos: algo brilla.",
     "lat": 41.40359,
     "lon": 2.1743,
     "radius": 12,
-    "audio": "pista5.mp3",
-    "image": "paw.png"
+    "ar": "balloon"
   },
   {
     "id": 6,
-    "title": "Pista 6",
-    "description": "Al lado de la puerta de madera.",
+    "title": "La Puerta Secreta",
+    "description": "Al lado de la puerta de madera hay un mapa pequeño.",
     "lat": 41.40351,
     "lon": 2.17436,
     "radius": 12,
-    "audio": "pista6.mp3",
-    "image": "key.png"
+    "ar": "key"
   },
   {
     "id": 7,
-    "title": "Pista 7",
-    "description": "Entre dos árboles muy juntos.",
+    "title": "La Huella Misteriosa",
+    "description": "Entre los dos árboles muy juntos: sigue la huella.",
     "lat": 41.40366,
     "lon": 2.17426,
     "radius": 12,
-    "audio": "pista7.mp3",
-    "image": "mountain.png"
+    "ar": "rocket"
   },
   {
     "id": 8,
-    "title": "Pista Final",
-    "description": "¡Habéis encontrado al Tío Nadal! Pulsa para verlo en AR.",
+    "title": "¡El Tío Nadal!",
+    "description": "¡Lo habéis encontrado! Pulsa para ver la sorpresa final en AR.",
     "lat": 41.4037,
     "lon": 2.1745,
     "radius": 15,
-    "audio": "final.mp3",
-    "image": "uncle.png"
+    "ar": "uncle"
   }
 ]

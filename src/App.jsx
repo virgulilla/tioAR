@@ -1,10 +1,10 @@
-// App.jsx
 import React from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import MapView from "./pages/MapView";
 import ClueView from "./pages/ClueView";
-import ARFinal from "./pages/ARFinal";
+import ARView from "./pages/ARView";
+import Final from "./pages/Final";
 
 export default function App() {
   return (
@@ -13,7 +13,8 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/map/:id" element={<MapView />} />
         <Route path="/pista/:id" element={<ClueView />} />
-        <Route path="/arfinal" element={<ARFinal />} />
+        <Route path="/ar/:id" element={<ARView />} />
+        <Route path="/final" element={<Final />} />
       </Routes>
     </BrowserRouter>
   );

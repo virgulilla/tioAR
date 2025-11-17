@@ -1,17 +1,28 @@
-// useGeoPosition.js
 import { useEffect, useState, useRef } from "react";
 
-export default function useGeoPosition(
-  options = { enableHighAccuracy: true, maximumAge: 1000, timeout: 5000 }
-) {
+export default function useGeoPosition({
+  simulate = false,
+  simLocation = null,
+} = {}) {
   const [position, setPosition] = useState(null);
   const [error, setError] = useState(null);
-  const watchIdRef = useRef(null);
+  const watchId = useRef(null);
 
   useEffect(() => {
-    if (!("geolocation" in navigator)) {
+    if (simulate && simLocation) {
+      // modo simulación: actualiza con la posición simulada
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setError(new Error("Geolocalización no disponible en este navegador."));
+      setPosition({
+        latitude: simLocation.latitude,
+        longitude: simLocation.longitude,
+        accuracy: 5,
+        timestamp: Date.now(),
+      });
+      return;
+    }
+
+    if (!("geolocation" in navigator)) {
+      setError(new Error("Geolocalización no disponible"));
       return;
     }
 
@@ -19,40 +30,23 @@ export default function useGeoPosition(
       const { latitude, longitude, accuracy } = pos.coords;
       setPosition({ latitude, longitude, accuracy, timestamp: pos.timestamp });
     };
+    const fail = (err) => setError(err);
 
-    const fail = (err) => {
-      setError(err);
-    };
-
-    // pedir permiso y empezar a vigilar
-    navigator.permissions
-      ?.query?.({ name: "geolocation" })
-      .then(() => {
-        watchIdRef.current = navigator.geolocation.watchPosition(
-          success,
-          fail,
-          options
-        );
-      })
-      .catch(() => {
-        // si no existe permissions API, igual intentamos
-        watchIdRef.current = navigator.geolocation.watchPosition(
-          success,
-          fail,
-          options
-        );
+    try {
+      watchId.current = navigator.geolocation.watchPosition(success, fail, {
+        enableHighAccuracy: true,
+        maximumAge: 1000,
+        timeout: 5000,
       });
+    } catch (e) {
+      setError(e);
+    }
 
     return () => {
-      if (watchIdRef.current !== null)
-        navigator.geolocation.clearWatch(watchIdRef.current);
+      if (watchId.current !== null)
+        navigator.geolocation.clearWatch(watchId.current);
     };
-  }, [
-    options,
-    options.enableHighAccuracy,
-    options.maximumAge,
-    options.timeout,
-  ]);
+  }, [simulate, simLocation]);
 
   return { position, error };
 }
