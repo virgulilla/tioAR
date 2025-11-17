@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useGeoPosition from "../hooks/useGeoPosition";
 import { haversineDistance, bearingDegrees } from "../hooks/useDistance";
-import pistas from "../data/pistas.json";
+import pistas from "../data/pistas";
 
 export default function MapView() {
   const { id } = useParams(); // id de la pista actual

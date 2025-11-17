@@ -1,7 +1,7 @@
 // ClueView.jsx
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import pistas from "../data/pistas.json";
+import pistas from "../data/pistas";
 
 // Si usas howler.js, podrías integrar audio en vez de <audio>
 export default function ClueView() {
