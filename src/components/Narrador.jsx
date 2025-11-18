@@ -9,29 +9,30 @@ export default function Narrador({
   autoContinue = false,
 }) {
   const audioRef = useRef(null);
-  const [needsUserAction, setNeedsUserAction] = useState(false);
+  const [needsUserAction, setNeedsUserAction] = useState(true);
+  // 🔥 Siempre empieza necesitando acción del usuario
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    // Intentar reproducir (puede fallar)
-    audio.play().catch(() => {
-      // Si falla → necesita interacción del usuario
-      setNeedsUserAction(true);
-    });
-
-    if (autoContinue) {
-      audio.onended = () => onFinish();
-    }
+    // Si autoContinue está activado, cuando termine avanza
+    audio.onended = () => {
+      if (autoContinue) onFinish();
+    };
   }, []);
 
   function startAudio() {
     const audio = audioRef.current;
     if (!audio) return;
 
-    audio.play();
-    setNeedsUserAction(false);
+    audio.play().then(() => {
+      setNeedsUserAction(false);
+    });
+  }
+
+  function handleContinue() {
+    if (!autoContinue) onFinish();
   }
 
   return (
@@ -43,14 +44,16 @@ export default function Narrador({
 
         <audio ref={audioRef} src={audioSrc} />
 
+        {/* 🔥 SIEMPRE se muestra este botón antes de reproducir */}
         {needsUserAction && (
           <button className="narrador-btn" onClick={startAudio}>
             ▶️ Reproducir narración
           </button>
         )}
 
+        {/* Botón continuar si no es autoContinue */}
         {!needsUserAction && !autoContinue && (
-          <button className="narrador-btn" onClick={onFinish}>
+          <button className="narrador-btn" onClick={handleContinue}>
             Continuar
           </button>
         )}

@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import pistas from "../data/pistas.json";
+import "./RiddlePage.css";
 
 import Narrador from "../components/Narrador";
 
