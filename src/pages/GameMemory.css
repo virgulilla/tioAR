@@ -1,0 +1,42 @@
+.memory-container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.memory-card {
+  width: 70px;
+  height: 70px;
+  background: #ffebcd;
+  border-radius: 10px;
+  font-size: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s;
+}
+
+.memory-card:active {
+  transform: scale(0.9);
+}
+
+.memory-card.visible {
+  background: #fff7e6;
+}
+
+.memory-finished {
+  margin-top: 20px;
+  font-size: 24px;
+  color: green;
+  font-weight: bold;
+}
