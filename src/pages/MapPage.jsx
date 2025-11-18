@@ -1,16 +1,34 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+
 import useGeo from "../hooks/useGeo";
 import useHeading from "../hooks/useHeading";
 import Radar from "../components/Radar";
+
+import Narrador from "../components/Narrador";
+
 import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
+
+import introAudio from "../assets/sounds/intro.mp3";
 
 export default function MapPage() {
   const nav = useNavigate();
   const coords = useGeo();
   const heading = useHeading();
+
   const { letras } = useLetras();
   const { index, pistas } = usePistas();
+
+  const [showNarrador, setShowNarrador] = useState(false);
+
+  // ⏳ Comprobar en localStorage si ya se mostró el narrador
+  useEffect(() => {
+    const alreadyShown = localStorage.getItem("introNarradorShown");
+    if (!alreadyShown) {
+      setShowNarrador(true);
+    }
+  }, []);
 
   const next = pistas[index];
 
@@ -40,6 +58,21 @@ export default function MapPage() {
 
   if (dist < 10) {
     nav(`/pista/${next.id}`);
+  }
+
+  // 🧙‍♂️ Mostrar el narrador SOLO si no se ha visto nunca
+  if (showNarrador) {
+    return (
+      <Narrador
+        audioSrc={introAudio}
+        texto="La búsqueda del Tió de Nadal comienza aqui. Sigue el radar para encontrar las pistas y conseguir todas las letras del Tió. ¡Mucha suerte!"
+        autoContinue={false}
+        onFinish={() => {
+          localStorage.setItem("introNarradorShown", "true"); // ← GUARDAR
+          setShowNarrador(false); // ← OCULTAR
+        }}
+      />
+    );
   }
 
   return (

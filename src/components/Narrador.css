@@ -1,0 +1,112 @@
+.narrador-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.narrador-box {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  width: 320px;
+  text-align: center;
+  animation: fadeIn 0.6s ease;
+  position: relative;
+}
+
+/* ---- PERSONAJE ---- */
+.tio-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tio-animado {
+  width: 200px;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ---- PARPADEO ---- */
+.eyelid {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: black;
+  border-radius: 50%;
+  opacity: 0;
+  transform-origin: center;
+  animation: blink 4s infinite;
+}
+
+/* Ajusta estos valores según los ojos reales */
+.eyelid-left {
+  top: 72px;
+  left: 62px;
+}
+
+.eyelid-right {
+  top: 72px;
+  right: 62px;
+}
+
+/* Animación de parpadeo */
+@keyframes blink {
+  0%,
+  46% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  47%,
+  53% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  54%,
+  100% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+}
+
+/* ---- ANIMACIÓN DE FLOTAR ---- */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* ---- TEXTO Y BOTÓN ---- */
+.narrador-texto {
+  margin-top: 15px;
+  font-size: 18px;
+}
+
+.narrador-btn {
+  margin-top: 18px;
+  padding: 12px 22px;
+  font-size: 17px;
+  background: #ffca28;
+  border: 3px solid #ffa000;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Fade-in general */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
