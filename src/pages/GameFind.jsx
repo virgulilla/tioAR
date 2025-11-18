@@ -3,7 +3,9 @@ import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
 import "./GameFind.css";
 
-export default function GameFind({ letra = "O" }) {
+import bg from "../assets/find/bg.png";
+
+export default function GameFind({ letra = "T" }) {
   const { addLetra } = useLetras();
   const { nextPista } = usePistas();
   const nav = useNavigate();
@@ -19,8 +21,9 @@ export default function GameFind({ letra = "O" }) {
       <h1>Encuentra el secreto</h1>
 
       <div className="find-area">
-        <img src="/find/bg.png" className="find-img" />
+        <img src={bg} className="find-img" />
 
+        {/* Hotspot invisible */}
         <button className="find-hotspot" onClick={found}></button>
       </div>
 

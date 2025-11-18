@@ -4,7 +4,7 @@ import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
 import "./GameBlow.css";
 
-export default function GameBlow({ letra = "T" }) {
+export default function GameBlow({ letra = "O" }) {
   const [power, setPower] = useState(0);
   const { addLetra } = useLetras();
   const { nextPista } = usePistas();
@@ -33,7 +33,7 @@ export default function GameBlow({ letra = "T" }) {
     if (power >= 100) {
       addLetra(letra);
       nextPista();
-      setTimeout(() => nav("/"), 800);
+      setTimeout(() => nav("/final"), 800);
     }
   }, [power]);
 

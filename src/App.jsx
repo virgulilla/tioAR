@@ -7,6 +7,7 @@ import GameQuiz from "./pages/GameQuiz";
 import GamePuzzle from "./pages/GamePuzzle";
 import GameBlow from "./pages/GameBlow";
 import GameFind from "./pages/GameFind";
+import FinalPuzzlePage from "./pages/FinalPuzzlePage";
 
 export default function App() {
   return (
@@ -17,8 +18,9 @@ export default function App() {
       <Route path="/juego/globos" element={<GameBalloons />} />
       <Route path="/juego/quiz" element={<GameQuiz />} />
       <Route path="/juego/puzzle" element={<GamePuzzle />} />
-      <Route path="/juego/codigo" element={<GameBlow />} />
-      <Route path="/juego/soplar" element={<GameFind />} />
+      <Route path="/juego/codigo" element={<GameFind />} />
+      <Route path="/juego/soplar" element={<GameBlow />} />
+      <Route path="/final" element={<FinalPuzzlePage />} />
     </Routes>
   );
 }

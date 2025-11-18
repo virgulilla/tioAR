@@ -16,10 +16,10 @@
 
 .find-hotspot {
   position: absolute;
-  top: 40%;
-  left: 60%;
-  width: 60px;
-  height: 60px;
+  top: 37%;
+  left: 36%;
+  width: 80px;
+  height: 71px;
   background: rgba(255, 0, 0, 0);
   border: none;
   cursor: pointer;
