@@ -1,0 +1,36 @@
+# Dependencias
+/node_modules
+/npm-debug.log*
+/yarn-error.log*
+/yarn.lock
+/pnpm-lock.yaml
+
+# Build (Salida de producción de Vite)
+/dist
+/dist-ssr
+
+# Dependencias de OS/IDE
+.DS_Store
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de configuración de variables de entorno (¡MUY IMPORTANTE!)
+.env
+.env.local
+.env.*.local
+
+# Cobertura de tests
+/coverage
+
+# Archivos de caché/historial
+/temp
+.cache
+
+# Logs
+logs
+*.log
+
+# Generados por Jest/Vitest
+/test-results

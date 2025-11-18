@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Parque Central",
+    "lat": 41.6710656,
+    "lng": 2.3724032,
+    "riddle": "Busca el columpio más alto y descubrirás el siguiente secreto…",
+    "game": "memory"
+  },
+  {
+    "id": 2,
+    "name": "Fuente de los Patos",
+    "lat": 41.392,
+    "lng": 2.163,
+    "riddle": "Los patos guardan un mensaje. ¿Puedes encontrarlo?",
+    "game": "globos"
+  }
+]

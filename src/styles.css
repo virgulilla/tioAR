@@ -1,83 +1,22 @@
-:root {
-  --bg: #fff7f0;
-  --accent: #ff5a5f;
-  --card: #fff;
-}
-* {
-  box-sizing: border-box;
-}
 body {
-  font-family: Inter, system-ui, Arial, sans-serif;
-  background: var(--bg);
-  color: #222;
+  margin: 0;
+  font-family: sans-serif;
+  background: #faf5e9;
 }
-.app {
-  max-width: 900px;
-  margin: 12px auto;
-  padding: 12px;
-}
-.header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.logo {
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #ffd1dc, #ffe7a7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-}
-.h1 {
-  font-size: 22px;
-}
-.intro {
-  margin: 12px 0;
-}
-.clues {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 8px;
-}
-.card {
-  background: var(--card);
-  padding: 12px;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-}
-.big-btn {
-  display: inline-block;
-  padding: 10px 16px;
-  border-radius: 12px;
-  background: var(--accent);
-  color: white;
-  font-weight: 700;
+
+button {
+  padding: 12px 20px;
+  background: #ff7b00;
   border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 18px;
 }
-.status {
-  font-size: 16px;
-  margin-top: 8px;
-}
-.map-placeholder {
-  height: 160px;
-  background: linear-gradient(90deg, #e0f7ff, #f3ffe6);
-  border-radius: 8px;
+
+.center {
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: center;
-}
-.ar-wrap {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 8px;
-}
-.endcard {
-  padding: 18px;
+  flex-direction: column;
   text-align: center;
 }
