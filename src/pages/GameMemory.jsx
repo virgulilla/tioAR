@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
 import "./GameMemory.css";
+
+import matchSound from "../assets/sounds/match.mp3";
 
 const EMOJIS = ["🍎", "🐻", "🌞", "🍓"];
 
@@ -16,14 +18,36 @@ export default function GameMemory({ letra = "R" }) {
   const { addLetra } = useLetras();
   const { nextPista } = usePistas();
 
+  // Refs para audio
+  const matchRef = useRef(null);
+
+  // 🔊 Permitir audio después del primer toque (iOS/Android)
+  const [canPlay, setCanPlay] = useState(false);
+
   useEffect(() => {
-    // Duplicar y mezclar cartas
+    const unlock = () => setCanPlay(true);
+    window.addEventListener("click", unlock, { once: true });
+    window.addEventListener("touchstart", unlock, { once: true });
+    return () => {
+      window.removeEventListener("click", unlock);
+      window.removeEventListener("touchstart", unlock);
+    };
+  }, []);
+
+  useEffect(() => {
     const duplicated = [...EMOJIS, ...EMOJIS].map((emoji, index) => ({
       id: index,
       emoji,
     }));
     setCards(duplicated.sort(() => Math.random() - 0.5));
   }, []);
+
+  function playSound(ref) {
+    if (!canPlay || !ref.current) return;
+    const audio = ref.current;
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }
 
   function handleSelect(card) {
     if (
@@ -43,6 +67,9 @@ export default function GameMemory({ letra = "R" }) {
 
       if (c1.emoji === c2.emoji) {
         setMatched([...matched, first, second]);
+
+        // 🔊 sonido de pareja encontrada
+        playSound(matchRef);
       }
 
       setTimeout(() => setSelected([]), 700);
@@ -55,9 +82,9 @@ export default function GameMemory({ letra = "R" }) {
       setFinished(true);
 
       setTimeout(() => {
-        addLetra(letra); // añade la letra globalmente
+        addLetra(letra);
         nextPista();
-        nav("/"); // vuelve al radar automáticamente
+        nav("/");
       }, 1000);
     }
   }, [matched]);
@@ -89,6 +116,9 @@ export default function GameMemory({ letra = "R" }) {
           ¡Muy bien! Has ganado la letra <strong>{letra}</strong> 🎉
         </div>
       )}
+
+      {/* Audios */}
+      <audio ref={matchRef} src={matchSound} preload="auto" />
     </div>
   );
 }

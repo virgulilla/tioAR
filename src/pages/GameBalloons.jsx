@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
 import "./GameBalloons.css";
+
+import popSound from "../assets/sounds/pop.mp3";
 
 export default function GameBalloons({ letra = "H" }) {
   const [balloons, setBalloons] = useState([]);
@@ -13,15 +15,39 @@ export default function GameBalloons({ letra = "H" }) {
   const { nextPista } = usePistas();
   const nav = useNavigate();
 
+  // Refs de audio
+  const popRef = useRef(null);
+
+  // 🔓 Permitir audio después del primer toque
+  const [canPlay, setCanPlay] = useState(false);
+
+  useEffect(() => {
+    const unlock = () => setCanPlay(true);
+    window.addEventListener("click", unlock, { once: true });
+    window.addEventListener("touchstart", unlock, { once: true });
+
+    return () => {
+      window.removeEventListener("click", unlock);
+      window.removeEventListener("touchstart", unlock);
+    };
+  }, []);
+
+  function playSound(ref) {
+    if (!canPlay || !ref.current) return;
+    const audio = ref.current;
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }
+
   // Crear globos iniciales
   useEffect(() => {
     const arr = [];
     for (let i = 0; i < 8; i++) {
       arr.push({
         id: i,
-        left: Math.random() * 70 + 10, // posición horizontal
-        delay: Math.random() * 3, // retardo animación
-        speed: Math.random() * 4 + 3, // velocidad diferente por globo
+        left: Math.random() * 70 + 10,
+        delay: Math.random() * 3,
+        speed: Math.random() * 4 + 3,
       });
     }
     setBalloons(arr);
@@ -29,7 +55,12 @@ export default function GameBalloons({ letra = "H" }) {
 
   function popBalloon(id) {
     if (popped.includes(id)) return;
+
+    // Marcar globo como reventado
     setPopped([...popped, id]);
+
+    // 🔊 Sonido de pop
+    playSound(popRef);
   }
 
   // Cuando explotan todos → entregar letra
@@ -38,9 +69,9 @@ export default function GameBalloons({ letra = "H" }) {
       setFinished(true);
 
       setTimeout(() => {
-        addLetra(letra); // entrega letra U
+        addLetra(letra);
         nextPista();
-        nav("/"); // volver al radar
+        nav("/");
       }, 1200);
     }
   }, [popped]);
@@ -72,6 +103,9 @@ export default function GameBalloons({ letra = "H" }) {
           ¡Muy bien! Has ganado la letra <strong>{letra}</strong> 🎉
         </div>
       )}
+
+      {/* Audios */}
+      <audio ref={popRef} src={popSound} preload="auto" />
     </div>
   );
 }
