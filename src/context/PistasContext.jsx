@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import pistas from "../data/pistas.json";
+import { NARRATIVAS } from "../data/pistas.js";
 
 const PistasContext = createContext();
 
@@ -7,11 +7,11 @@ export function PistasProvider({ children }) {
   const [index, setIndex] = useState(0);
 
   function nextPista() {
-    if (index < pistas.length - 1) setIndex(index + 1);
+    if (index < NARRATIVAS.length - 1) setIndex(index + 1);
   }
 
   return (
-    <PistasContext.Provider value={{ index, nextPista, pistas }}>
+    <PistasContext.Provider value={{ index, nextPista, pistas: NARRATIVAS }}>
       {children}
     </PistasContext.Provider>
   );

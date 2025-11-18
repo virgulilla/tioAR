@@ -1,4 +1,22 @@
-[
+// src/data/narrativas.js (o donde lo guardes)
+
+// ----------------------------------------------------
+// IMPORTACIONES DE AUDIO
+// Vite procesará estas rutas y nos devolverá la URL pública correcta
+// La ruta '../assets/sounds/' debe ser la correcta relativa a la ubicación de este archivo.
+// ----------------------------------------------------
+import memoryAudio from '../assets/sounds/memory.mp3';
+import globosAudio from '../assets/sounds/globos.mp3';
+import quizAudio from '../assets/sounds/quiz.mp3';
+import puzzleAudio from '../assets/sounds/puzzle.mp3';
+import codigoAudio from '../assets/sounds/codigo.mp3';
+import soplarAudio from '../assets/sounds/soplar.mp3';
+
+
+// ----------------------------------------------------
+// ESTRUCTURA DE DATOS FINAL (Array de Narrativas)
+// ----------------------------------------------------
+export const NARRATIVAS = [
   {
     "id": 1,
     "name": "Parque Central",
@@ -8,7 +26,7 @@
     "game": "memory",
     "letra": "H",
     "narradorTexto": "Ah, aventurero… Aquí se guardan recuerdos ocultos del bosque mágico. Si consigues emparejar las imágenes correctas, liberarás un trocito de la magia del Tió.",
-    "narradorAudio": "/sounds/memory.mp3"
+    "narradorAudio": memoryAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
   },
   {
     "id": 2,
@@ -19,7 +37,7 @@
     "game": "globos",
     "letra": "U",
     "narradorTexto": "Shhh… escucha bien. Los patos del estanque susurran pistas escondidas. Atrapa los globos correctos y descifrarás su secreto.",
-    "narradorAudio": "/sounds/globos.mp3"
+    "narradorAudio": globosAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
   },
   {
     "id": 3,
@@ -30,7 +48,7 @@
     "game": "quiz",
     "letra": "E",
     "narradorTexto": "Este viejo árbol ha visto pasar cientos de inviernos… y sólo comparte su sabiduría con quienes se atreven a escuchar. Responde a sus preguntas y te revelará otra parte de la magia del Tió.",
-    "narradorAudio": "/sounds/quiz.mp3"
+    "narradorAudio": quizAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
   },
   {
     "id": 4,
@@ -41,7 +59,7 @@
     "game": "puzzle",
     "letra": "R",
     "narradorTexto": "Este pequeño puente conecta mundos… pero la magia está rota. Ordena las piezas desordenadas y devolverás su brillo, acercándonos un paso más al misterio final.",
-    "narradorAudio": "/sounds/puzzle.mp3"
+    "narradorAudio": puzzleAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
   },
   {
     "id": 5,
@@ -52,7 +70,7 @@
     "game": "codigo",
     "letra": "T",
     "narradorTexto": "Esta antigua piedra susurra códigos olvidados… Solo los aventureros más astutos pueden descifrarlos. Si logras resolver el mensaje, liberarás otro fragmento del poder del Tió.",
-    "narradorAudio": "/sounds/codigo.mp3"
+    "narradorAudio": codigoAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
   },
   {
     "id": 6,
@@ -63,6 +81,6 @@
     "game": "soplar",
     "letra": "O",
     "narradorTexto": "En este jardín encantado, las flores despiertan con la magia del aliento. Sopla con fuerza, con alegría, y deja que la naturaleza revele la última letra de nuestro gran secreto.",
-    "narradorAudio": "/sounds/soplar.mp3"
+    "narradorAudio": soplarAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
   }
-]
+];

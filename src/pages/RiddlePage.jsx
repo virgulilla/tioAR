@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import pistas from "../data/pistas.json";
+import { NARRATIVAS } from "../data/pistas.js";
 import "./RiddlePage.css";
 
 import Narrador from "../components/Narrador";
@@ -8,7 +8,7 @@ import Narrador from "../components/Narrador";
 export default function RiddlePage() {
   const { id } = useParams();
   const nav = useNavigate();
-  const pista = pistas.find((p) => p.id === Number(id));
+  const pista = NARRATIVAS.find((p) => p.id === Number(id));
 
   const [showNarrador, setShowNarrador] = useState(false);
 
