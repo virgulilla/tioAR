@@ -64,6 +64,7 @@ export default function MapPage() {
   if (showNarrador) {
     return (
       <Narrador
+        key={introAudio}
         audioSrc={introAudio}
         texto="La búsqueda del Tió de Nadal comienza aqui. Sigue el radar para encontrar las pistas y conseguir todas las letras del Tió. ¡Mucha suerte!"
         autoContinue={false}
