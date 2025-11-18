@@ -28,7 +28,9 @@
     "lng": 2.1633,
     "riddle": "El viejo árbol sabe muchas historias… ¡Hazle una pregunta!",
     "game": "quiz",
-    "letra": "E"
+    "letra": "E",
+    "narradorTexto": "Este viejo árbol ha visto pasar cientos de inviernos… y sólo comparte su sabiduría con quienes se atreven a escuchar. Responde a sus preguntas y te revelará otra parte de la magia del Tió.",
+    "narradorAudio": "/src/assets/sounds/quiz.mp3"
   },
   {
     "id": 4,
@@ -37,7 +39,9 @@
     "lng": 2.1634,
     "riddle": "Cruza el puente y reúne las piezas perdidas.",
     "game": "puzzle",
-    "letra": "R"
+    "letra": "R",
+    "narradorTexto": "Este pequeño puente conecta mundos… pero la magia está rota. Ordena las piezas desordenadas y devolverás su brillo, acercándonos un paso más al misterio final.",
+    "narradorAudio": "/src/assets/sounds/puzzle.mp3"
   },
   {
     "id": 5,
@@ -46,7 +50,9 @@
     "lng": 2.1635,
     "riddle": "La piedra esconde un mensaje secreto. ¿Puedes descifrarlo?",
     "game": "codigo",
-    "letra": "T"
+    "letra": "T",
+    "narradorTexto": "Esta antigua piedra susurra códigos olvidados… Solo los aventureros más astutos pueden descifrarlos. Si logras resolver el mensaje, liberarás otro fragmento del poder del Tió.",
+    "narradorAudio": "/src/assets/sounds/codigo.mp3"
   },
   {
     "id": 6,
@@ -55,6 +61,8 @@
     "lng": 2.1636,
     "riddle": "Las flores brillan cuando soplas… ¿Qué ocurrirá?",
     "game": "soplar",
-    "letra": "O"
+    "letra": "O",
+    "narradorTexto": "En este jardín encantado, las flores despiertan con la magia del aliento. Sopla con fuerza, con alegría, y deja que la naturaleza revele la última letra de nuestro gran secreto.",
+    "narradorAudio": "/src/assets/sounds/soplar.mp3"
   }
 ]
