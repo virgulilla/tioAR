@@ -49,7 +49,7 @@ export default function Narrador({
       setNeedsUserAction(false);
     } catch (err) {
       // En iPhone a veces falla, reintentamos
-      console.log("Reintentando play()", err);
+      alert("Reintentando play()", err);
       setTimeout(startAudio, 200);
     }
   }
