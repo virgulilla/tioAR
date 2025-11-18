@@ -4,9 +4,11 @@
     "name": "Parque Central",
     "lat": 41.392,
     "lng": 2.163,
-    "riddle": "Busca el columpio más alto y descubrirás el siguiente secreto…",
+    "riddle": "Tendrás que recordar para liberar la magia.",
     "game": "memory",
-    "letra": "H"
+    "letra": "H",
+    "narradorTexto": "Ah, aventurero… Aquí se guardan recuerdos ocultos del bosque mágico. Si consigues emparejar las imágenes correctas, liberarás un trocito de la magia del Tió.",
+    "narradorAudio": "/src/assets/sounds/memory.mp3"
   },
   {
     "id": 2,
@@ -15,7 +17,9 @@
     "lng": 2.1632,
     "riddle": "Los patos guardan un mensaje. ¿Puedes encontrarlo?",
     "game": "globos",
-    "letra": "U"
+    "letra": "U",
+    "narradorTexto": "Shhh… escucha bien. Los patos del estanque susurran pistas escondidas. Atrapa los globos correctos y descifrarás su secreto.",
+    "narradorAudio": "/src/assets/sounds/globos.mp3"
   },
   {
     "id": 3,
