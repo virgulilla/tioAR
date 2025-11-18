@@ -10,6 +10,7 @@ export default function Narrador({
 }) {
   const audioRef = useRef(null);
   const [needsUserAction, setNeedsUserAction] = useState(true); // Se reinicia cada vez que el componente se monta
+  const [error, setError] = useState(null);
 
   // No necesitamos 'audioReady' si usamos 'canplaythrough' directamente
   // o si confiamos en que 'preload="auto"' funcionará.
@@ -39,18 +40,25 @@ export default function Narrador({
     const audio = audioRef.current;
     if (!audio) return;
 
-    // Si ya está reproduciendo, no hacer nada
-    if (needsUserAction === false) return;
+    setError(null);
+
+    if (!audioRef.current.readyState >= 3) {
+      // readyState >= 3 significa loading o cargado
+      console.log("Audio no cargado, reintentando...");
+      setTimeout(() => startAudio(), 100);
+      return;
+    }
 
     try {
       // Intentamos reproducir
       await audio.play();
       setNeedsUserAction(false);
     } catch (err) {
-      // En móvil, si falla es porque el navegador lo bloqueó.
-      // Ya no intentamos con setTimeout; el usuario deberá hacer clic de nuevo si es necesario.
-      console.error("Fallo al intentar play()", err);
-      // Opcionalmente: alert("Presiona reproducir de nuevo si no escuchas nada.");
+      const errorMessage = `❌ Fallo al reproducir: ${err.name} - ${err.message}`;
+      console.error(errorMessage, err);
+
+      // Muestra el error en la interfaz
+      setError(errorMessage);
     }
   }
 
@@ -65,6 +73,7 @@ export default function Narrador({
         <img src={tioImg} className="tio-animado" alt="Narrador" />
 
         {texto && <p className="narrador-texto">{texto}</p>}
+        {error && <p className="narrador-error">{error}</p>}
 
         {/* El audio necesita ser cargado con la nueva src cada vez */}
         <audio ref={audioRef} src={audioSrc} preload="auto" />

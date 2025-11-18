@@ -110,3 +110,13 @@
     opacity: 1;
   }
 }
+
+.narrador-error {
+  color: #a00; /* Rojo oscuro */
+  background-color: #fee; /* Fondo rojo muy claro */
+  border: 1px solid #f99;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 4px;
+  font-weight: bold;
+}
