@@ -31,6 +31,7 @@ export default function RiddlePage() {
   if (showNarrador) {
     return (
       <Narrador
+        key={pista.narradorAudio}
         audioSrc={pista.narradorAudio}
         texto={pista.narradorTexto}
         autoContinue={false}
