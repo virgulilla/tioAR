@@ -1,0 +1,46 @@
+.radar-container {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  border: 6px solid #2d7a2f;
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Fondo base */
+  background: radial-gradient(circle, #b0ffb0 0%, #79e279 60%, #4caf50 100%);
+  animation: radarPulse 2s infinite ease-in-out;
+}
+
+@keyframes radarPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 20px 25px rgba(0, 255, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);
+  }
+}
+
+/* Halo de radar moviéndose */
+.radar-halo {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: haloSpin 3s linear infinite;
+}
+
+@keyframes haloSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
