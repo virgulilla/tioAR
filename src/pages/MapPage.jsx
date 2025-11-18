@@ -10,7 +10,7 @@ import Narrador from "../components/Narrador";
 import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
 
-import introAudio from "../assets/sounds/intro.mp3";
+import introAudio from "/sounds/intro.mp3";
 
 export default function MapPage() {
   const nav = useNavigate();
