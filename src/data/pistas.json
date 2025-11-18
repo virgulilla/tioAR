@@ -5,14 +5,52 @@
     "lat": 41.392,
     "lng": 2.163,
     "riddle": "Busca el columpio más alto y descubrirás el siguiente secreto…",
-    "game": "memory"
+    "game": "memory",
+    "letra": "H"
   },
   {
     "id": 2,
     "name": "Fuente de los Patos",
-    "lat": 41.392,
-    "lng": 2.163,
+    "lat": 41.3921,
+    "lng": 2.1632,
     "riddle": "Los patos guardan un mensaje. ¿Puedes encontrarlo?",
-    "game": "globos"
+    "game": "globos",
+    "letra": "U"
+  },
+  {
+    "id": 3,
+    "name": "Banco del Gran Árbol",
+    "lat": 41.3922,
+    "lng": 2.1633,
+    "riddle": "El viejo árbol sabe muchas historias… ¡Hazle una pregunta!",
+    "game": "quiz",
+    "letra": "E"
+  },
+  {
+    "id": 4,
+    "name": "Puente Pequeñito",
+    "lat": 41.3923,
+    "lng": 2.1634,
+    "riddle": "Cruza el puente y reúne las piezas perdidas.",
+    "game": "puzzle",
+    "letra": "R"
+  },
+  {
+    "id": 5,
+    "name": "Piedra Misteriosa",
+    "lat": 41.3924,
+    "lng": 2.1635,
+    "riddle": "La piedra esconde un mensaje secreto. ¿Puedes descifrarlo?",
+    "game": "codigo",
+    "letra": "T"
+  },
+  {
+    "id": 6,
+    "name": "Jardín de las Flores",
+    "lat": 41.3925,
+    "lng": 2.1636,
+    "riddle": "Las flores brillan cuando soplas… ¿Qué ocurrirá?",
+    "game": "soplar",
+    "letra": "O"
   }
 ]

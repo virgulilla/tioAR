@@ -1,0 +1,20 @@
+.quiz-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.quiz-btn {
+  font-size: 20px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #90caf9;
+  border: 3px solid #42a5f5;
+  cursor: pointer;
+}

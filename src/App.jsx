@@ -3,6 +3,8 @@ import MapPage from "./pages/MapPage";
 import RiddlePage from "./pages/RiddlePage";
 import GameMemory from "./pages/GameMemory";
 import GameBalloons from "./pages/GameBalloons";
+import GameQuiz from "./pages/GameQuiz";
+import GamePuzzle from "./pages/GamePuzzle";
 
 export default function App() {
   return (
@@ -11,6 +13,8 @@ export default function App() {
       <Route path="/pista/:id" element={<RiddlePage />} />
       <Route path="/juego/memory" element={<GameMemory />} />
       <Route path="/juego/globos" element={<GameBalloons />} />
+      <Route path="/juego/quiz" element={<GameQuiz />} />
+      <Route path="/juego/puzzle" element={<GamePuzzle />} />
     </Routes>
   );
 }

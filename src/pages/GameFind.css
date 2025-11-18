@@ -1,0 +1,26 @@
+.find-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.find-area {
+  position: relative;
+  width: 90%;
+  margin: auto;
+}
+
+.find-img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.find-hotspot {
+  position: absolute;
+  top: 40%;
+  left: 60%;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 0, 0, 0);
+  border: none;
+  cursor: pointer;
+}
