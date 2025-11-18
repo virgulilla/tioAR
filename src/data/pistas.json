@@ -2,8 +2,8 @@
   {
     "id": 1,
     "name": "Parque Central",
-    "lat": 41.6710656,
-    "lng": 2.3724032,
+    "lat": 41.392,
+    "lng": 2.163,
     "riddle": "Busca el columpio más alto y descubrirás el siguiente secreto…",
     "game": "memory"
   },

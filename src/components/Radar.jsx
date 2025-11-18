@@ -1,49 +1,54 @@
-// components/Radar.jsx
-import flecha from "../assets/flecha.png";
+import arrowImg from "../assets/flecha.png";
 
-export default function Radar({ distance, bearing }) {
-  const size = 260; // tamaño del radar, ajustable
+export default function Radar({ distance, bearing, heading }) {
+  // Si el heading aún no está disponible:
+  const rotation = heading == null ? 0 : bearing - heading;
 
   return (
     <div
       style={{
-        width: size,
-        height: size,
+        position: "relative",
+        width: "260px",
+        height: "260px",
         borderRadius: "50%",
         background:
-          "radial-gradient(circle, #5eff5e 0%, #7dff7d 60%, #c3ffc3 100%)",
-        border: "4px solid green",
-        position: "relative",
+          "radial-gradient(circle, #b0ffb0 0%, #79e279 60%, #4caf50 100%)",
+        border: "6px solid #2d7a2f",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         margin: "20px auto",
       }}
     >
-      {/* Flecha PNG centrada y rotada */}
+      {/* Flecha dentro del radar */}
       <img
-        src={flecha}
-        alt="arrow"
+        src={arrowImg}
+        alt="flecha"
         style={{
-          width: "70px",
+          width: "90px",
+          height: "90px",
           position: "absolute",
+          transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
           top: "50%",
           left: "50%",
-          transform: `translate(-50%, -50%) rotate(${bearing}deg)`,
-          transformOrigin: "center center",
-          transition: "transform 0.2s linear",
+          transition: "transform 0.15s linear",
+          userSelect: "none",
+          pointerEvents: "none",
         }}
       />
 
-      {/* Distancia debajo */}
+      {/* Distancia en metros */}
       <div
         style={{
           position: "absolute",
           bottom: "-40px",
           width: "100%",
           textAlign: "center",
-          fontSize: "20px",
           fontWeight: "bold",
+          fontSize: "20px",
         }}
       >
-        {distance ? `${Math.round(distance)} m` : "Calculando..."}
+        {distance.toFixed(0)} m
       </div>
     </div>
   );

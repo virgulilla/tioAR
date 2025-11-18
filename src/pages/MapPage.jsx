@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import pistas from "../data/pistas.json";
 import useGeo from "../hooks/useGeo";
+import useHeading from "../hooks/useHeading";
 import Radar from "../components/Radar";
 
 export default function MapPage() {
   const nav = useNavigate();
   const coords = useGeo();
+  const heading = useHeading();
 
   const next = pistas[0];
 
@@ -33,7 +35,7 @@ export default function MapPage() {
   const dist = distance(coords.lat, coords.lng, next.lat, next.lng);
   const bearing = getBearing(coords.lat, coords.lng, next.lat, next.lng);
 
-  // ⭐ Activación automática
+  // Auto-abrir acertijo al llegar a zona
   if (dist < 10) {
     nav(`/pista/${next.id}`);
   }
@@ -43,7 +45,7 @@ export default function MapPage() {
       <h2>Siguiente destino:</h2>
       <h3>{next.name}</h3>
 
-      <Radar distance={dist} bearing={bearing} />
+      <Radar distance={dist} bearing={bearing} heading={heading} />
     </div>
   );
 }
