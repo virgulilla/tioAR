@@ -19,7 +19,7 @@ function shuffle(arr) {
   return a;
 }
 
-export default function GamePuzzle({ letra = "E" }) {
+export default function GamePuzzle({ letra = "R" }) {
   const nav = useNavigate();
   const { addLetra } = useLetras();
   const { nextPista } = usePistas();
@@ -56,7 +56,6 @@ export default function GamePuzzle({ letra = "E" }) {
     const text = e.dataTransfer.getData("text/plain");
     const fromIndexStr = e.dataTransfer.getData("fromIndex");
     if (!text || !fromIndexStr) {
-      console.log("drop: datos vacíos", { text, fromIndexStr });
       return;
     }
     const pieceId = Number(text);
