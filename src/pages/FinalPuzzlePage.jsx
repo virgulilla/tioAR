@@ -4,18 +4,20 @@ import "./FinalPuzzlePage.css";
 
 export default function FinalPuzzlePage() {
   const { letras } = useLetras();
-  const palabraFinal = "HUERTO";
+  const palabraFinal = "HUERTO".split("");
 
   const [positions, setPositions] = useState([]);
   const [finalPositions, setFinalPositions] = useState([]);
 
   useEffect(() => {
-    const startPos = letras.map(() => ({
+    // 1️⃣ Crear posiciones iniciales aleatorias para HUERTO
+    const startPos = palabraFinal.map(() => ({
       top: Math.random() * 70 + "%",
       left: Math.random() * 70 + "%",
     }));
 
-    const endPos = palabraFinal.split("").map((_, i) => ({
+    // 2️⃣ Posiciones finales ordenadas
+    const endPos = palabraFinal.map((_, i) => ({
       top: "50%",
       left: `${20 + i * 10}%`,
     }));
@@ -24,7 +26,7 @@ export default function FinalPuzzlePage() {
 
     setTimeout(() => {
       setFinalPositions(endPos);
-    }, 1000);
+    }, 500);
   }, []);
 
   return (
@@ -32,7 +34,7 @@ export default function FinalPuzzlePage() {
       <h1>¡Felicidades! Has encontrado todas las letras</h1>
 
       <div className="letters-stage">
-        {letras.map((l, i) => (
+        {palabraFinal.map((letter, i) => (
           <span
             key={i}
             className="flying-letter"
@@ -42,7 +44,7 @@ export default function FinalPuzzlePage() {
               transition: "all 2s ease",
             }}
           >
-            {l}
+            {letter}
           </span>
         ))}
       </div>

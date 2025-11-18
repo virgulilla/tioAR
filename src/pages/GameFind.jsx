@@ -5,7 +5,7 @@ import "./GameFind.css";
 
 import bg from "../assets/find/bg.png";
 
-export default function GameFind({ letra = "T" }) {
+export default function GameFind({ letra = "E" }) {
   const { addLetra } = useLetras();
   const { nextPista } = usePistas();
   const nav = useNavigate();

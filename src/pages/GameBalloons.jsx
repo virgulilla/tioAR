@@ -4,7 +4,7 @@ import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
 import "./GameBalloons.css";
 
-export default function GameBalloons({ letra = "U" }) {
+export default function GameBalloons({ letra = "H" }) {
   const [balloons, setBalloons] = useState([]);
   const [popped, setPopped] = useState([]);
   const [finished, setFinished] = useState(false);

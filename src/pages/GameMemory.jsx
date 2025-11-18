@@ -6,7 +6,7 @@ import "./GameMemory.css";
 
 const EMOJIS = ["🍎", "🐻", "🌞", "🍓"];
 
-export default function GameMemory({ letra = "H" }) {
+export default function GameMemory({ letra = "R" }) {
   const [cards, setCards] = useState([]);
   const [selected, setSelected] = useState([]);
   const [matched, setMatched] = useState([]);

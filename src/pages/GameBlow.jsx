@@ -4,7 +4,7 @@ import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
 import "./GameBlow.css";
 
-export default function GameBlow({ letra = "O" }) {
+export default function GameBlow({ letra = "U" }) {
   const [power, setPower] = useState(0);
   const { addLetra } = useLetras();
   const { nextPista } = usePistas();

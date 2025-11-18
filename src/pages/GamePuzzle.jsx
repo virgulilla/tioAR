@@ -19,7 +19,7 @@ function shuffle(arr) {
   return a;
 }
 
-export default function GamePuzzle({ letra = "R" }) {
+export default function GamePuzzle({ letra = "T" }) {
   const nav = useNavigate();
   const { addLetra } = useLetras();
   const { nextPista } = usePistas();

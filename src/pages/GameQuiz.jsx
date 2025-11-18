@@ -22,7 +22,7 @@ const questions = [
   },
 ];
 
-export default function GameQuiz({ letra = "E" }) {
+export default function GameQuiz({ letra = "O" }) {
   const [step, setStep] = useState(0);
   const [finished, setFinished] = useState(false);
 
