@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useLetras } from "../context/LetrasContext";
 import "./FinalPuzzlePage.css";
+import finalAudio from "../assets/sounds/final.mp3";
 
 export default function FinalPuzzlePage() {
   const { letras } = useLetras();
@@ -43,10 +44,7 @@ export default function FinalPuzzlePage() {
         ▶ Escuchar mensaje final del Tió
       </button>
 
-      <audio
-        ref={audioRef}
-        src="/src/assets/sounds/final.mp3" // Cambia esta ruta a tu audio real
-      />
+      <audio ref={audioRef} src={finalAudio} />
 
       <div className="letters-stage">
         {palabraFinal.map((letter, i) => (
