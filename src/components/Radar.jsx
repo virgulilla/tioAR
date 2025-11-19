@@ -40,7 +40,7 @@ export default function Radar({ distance, bearing, heading, interval = 8000 }) {
     return () => clearInterval(intervalId);
   }, [canPlay, interval]);
 
-  const rotation = heading == null ? 0 : bearing - heading;
+  const rotation = heading == null ? 0 : heading - bearing;
 
   return (
     <div className="radar-container">

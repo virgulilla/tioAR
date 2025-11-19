@@ -56,7 +56,7 @@ export default function MapPage() {
   const dist = distance(coords.lat, coords.lng, next.lat, next.lng);
   const bearing = getBearing(coords.lat, coords.lng, next.lat, next.lng);
 
-  if (dist < 10) {
+  if (dist < 5) {
     nav(`/pista/${next.id}`);
   }
 
