@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
+import GameVictory from "../components/GameVictory"; // 💡 IMPORTAR
 import "./GamePuzzle.css";
 import p1 from "../assets/puzzle/p1.png";
 import p2 from "../assets/puzzle/p2.png";
@@ -22,20 +23,19 @@ function shuffle(arr) {
 export default function GamePuzzle({ letra = "T" }) {
   const nav = useNavigate();
   const { addLetra } = useLetras();
-  const { nextPista } = usePistas();
+  const { nextPista } = usePistas(); // order[index] = pieceId que está en esa casilla (ej: [2,0,3,1])
 
-  // order[index] = pieceId que está en esa casilla (ej: [2,0,3,1])
-  const [order, setOrder] = useState([]);
-  // para fallback en móvil (tap to swap)
-  const [selectedSlot, setSelectedSlot] = useState(null);
-  // un flag para bloquear mientras comprobamos victoria
+  const [order, setOrder] = useState([]); // para fallback en móvil (tap to swap)
+  const [selectedSlot, setSelectedSlot] = useState(null); // un flag para bloquear mientras comprobamos victoria
   const [blocked, setBlocked] = useState(false);
+
+  const [showVictory, setShowVictory] = useState(false); // 💡 NUEVO ESTADO
 
   useEffect(() => {
     const initial = shuffle([0, 1, 2, 3]);
     setOrder(initial);
     console.log("Puzzle inicial:", initial);
-  }, []);
+  }, []); // ... (handleDragStart, handleDragOver, handleDrop, handleSlotClick — sin cambios)
 
   // Drag handlers (desktop)
   function handleDragStart(e, pieceId, fromIndex) {
@@ -68,9 +68,8 @@ export default function GamePuzzle({ letra = "T" }) {
       fromIndex,
       "toIndex",
       toIndex
-    );
+    ); // Intercambiar: poner pieceId en toIndex, y pieza que estaba en toIndex a fromIndex
 
-    // Intercambiar: poner pieceId en toIndex, y pieza que estaba en toIndex a fromIndex
     setOrder((prev) => {
       const next = prev.slice();
       const pieceAtTo = next[toIndex];
@@ -78,9 +77,8 @@ export default function GamePuzzle({ letra = "T" }) {
       next[fromIndex] = pieceAtTo;
       return next;
     });
-  }
+  } // Fallback móvil: tap para seleccionar y tap para intercambiar
 
-  // Fallback móvil: tap para seleccionar y tap para intercambiar
   function handleSlotClick(index) {
     if (blocked) return;
     if (selectedSlot === null) {
@@ -90,8 +88,7 @@ export default function GamePuzzle({ letra = "T" }) {
     if (selectedSlot === index) {
       setSelectedSlot(null);
       return;
-    }
-    // swap selectedSlot <-> index
+    } // swap selectedSlot <-> index
     setOrder((prev) => {
       const next = prev.slice();
       const a = next[selectedSlot];
@@ -100,30 +97,38 @@ export default function GamePuzzle({ letra = "T" }) {
       return next;
     });
     setSelectedSlot(null);
-  }
+  } // Comprobar victoria
 
-  // Comprobar victoria
   useEffect(() => {
     if (order.length === 4) {
       const isCorrect =
         order[0] === 0 && order[1] === 1 && order[2] === 2 && order[3] === 3;
       if (isCorrect) {
         setBlocked(true);
+        // 💡 CAMBIAR: En lugar de navegar, mostramos la victoria
         setTimeout(() => {
-          addLetra(letra);
-          nextPista();
-          nav("/");
-        }, 900);
+          setShowVictory(true);
+        }, 900); // 900ms para que se asiente la imagen
       }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
+
+  // 💡 FUNCIÓN DE CONTINUACIÓN
+  function handleVictoryContinue() {
+    addLetra(letra);
+    nextPista();
+    nav("/"); // Volver al mapa/siguiente pista
+  }
+
+  // 💡 RENDERIZADO CONDICIONAL
+  if (showVictory) {
+    return <GameVictory letra={letra} onContinue={handleVictoryContinue} />;
+  }
 
   return (
     <div className="puzzle-container">
       <h1>¡Monta el puzzle!</h1>
       <p>Toca o arrastra las piezas hasta que formen la imagen.</p>
-
       <div className="puzzle-grid" role="grid">
         {order.map((pieceId, index) => {
           const src = PUZZLE_IMAGES[pieceId];
@@ -141,15 +146,13 @@ export default function GamePuzzle({ letra = "T" }) {
                 onDragStart={(e) => handleDragStart(e, pieceId, index)}
                 src={src}
                 alt={`pieza ${pieceId}`}
-                className="puzzle-piece"
-                // evitar que el img actúe como ghost en algunos browsers:
+                className="puzzle-piece" // evitar que el img actúe como ghost en algunos browsers:
                 onDragEnd={() => console.log("dragend")}
               />
             </div>
           );
         })}
       </div>
-
       <div style={{ marginTop: 18 }}>
         <button
           className="puzzle-reset"

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
+import GameVictory from "../components/GameVictory"; // 💡 IMPORTAR
 import "./GameBalloons.css";
 
 import popSound from "../assets/sounds/pop.mp3";
@@ -10,15 +11,14 @@ export default function GameBalloons({ letra = "H" }) {
   const [balloons, setBalloons] = useState([]);
   const [popped, setPopped] = useState([]);
   const [finished, setFinished] = useState(false);
+  const [showVictory, setShowVictory] = useState(false); // 💡 NUEVO ESTADO
 
   const { addLetra } = useLetras();
   const { nextPista } = usePistas();
-  const nav = useNavigate();
+  const nav = useNavigate(); // Refs de audio
 
-  // Refs de audio
-  const popRef = useRef(null);
+  const popRef = useRef(null); // 🔓 Permitir audio después del primer toque
 
-  // 🔓 Permitir audio después del primer toque
   const [canPlay, setCanPlay] = useState(false);
 
   useEffect(() => {
@@ -37,9 +37,8 @@ export default function GameBalloons({ letra = "H" }) {
     const audio = ref.current;
     audio.currentTime = 0;
     audio.play().catch(() => {});
-  }
+  } // Crear globos iniciales
 
-  // Crear globos iniciales
   useEffect(() => {
     const arr = [];
     for (let i = 0; i < 8; i++) {
@@ -54,33 +53,40 @@ export default function GameBalloons({ letra = "H" }) {
   }, []);
 
   function popBalloon(id) {
-    if (popped.includes(id)) return;
+    if (popped.includes(id)) return; // Marcar globo como reventado
 
-    // Marcar globo como reventado
-    setPopped([...popped, id]);
+    setPopped([...popped, id]); // 🔊 Sonido de pop
 
-    // 🔊 Sonido de pop
     playSound(popRef);
-  }
+  } // Cuando explotan todos → entregar letra
 
-  // Cuando explotan todos → entregar letra
   useEffect(() => {
     if (balloons.length && popped.length === balloons.length) {
       setFinished(true);
 
       setTimeout(() => {
-        addLetra(letra);
-        nextPista();
-        nav("/");
-      }, 1200);
+        // 💡 CAMBIAR: En lugar de navegar, mostramos la victoria
+        setShowVictory(true);
+      }, 800); // 800ms para ver el último globo reventar
     }
-  }, [popped]);
+  }, [popped, balloons.length]);
+
+  // 💡 FUNCIÓN PARA CONTINUAR DESPUÉS DE LA PANTALLA DE VICTORIA
+  function handleVictoryContinue() {
+    addLetra(letra);
+    nextPista();
+    nav("/");
+  }
+
+  // 💡 RENDERIZADO CONDICIONAL
+  if (showVictory) {
+    return <GameVictory letra={letra} onContinue={handleVictoryContinue} />;
+  }
 
   return (
     <div className="balloons-container">
       <h1>¡Explota los globos!</h1>
       <p>Toca todos los globos para ganar la siguiente letra.</p>
-
       <div className="balloons-area">
         {balloons.map((b) => (
           <div
@@ -97,13 +103,6 @@ export default function GameBalloons({ letra = "H" }) {
           </div>
         ))}
       </div>
-
-      {finished && (
-        <div className="balloons-finished">
-          ¡Muy bien! Has ganado la letra <strong>{letra}</strong> 🎉
-        </div>
-      )}
-
       {/* Audios */}
       <audio ref={popRef} src={popSound} preload="auto" />
     </div>

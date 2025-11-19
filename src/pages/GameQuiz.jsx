@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
+import GameVictory from "../components/GameVictory"; // 💡 IMPORTAR
 import "./GameQuiz.css";
 
 const questions = [
@@ -25,33 +26,45 @@ const questions = [
 export default function GameQuiz({ letra = "O" }) {
   const [step, setStep] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [showVictory, setShowVictory] = useState(false); // 💡 NUEVO ESTADO
 
   const { addLetra } = useLetras();
   const { nextPista } = usePistas();
   const nav = useNavigate();
 
+  // 💡 FUNCIÓN DE CONTINUACIÓN
+  function handleVictoryContinue() {
+    addLetra(letra);
+    nextPista();
+    nav("/"); // Navegar al mapa/siguiente pista
+  }
+
   function answer(i) {
+    // Si la respuesta es correcta
     if (i === questions[step].correct) {
+      // Si es la última pregunta
       if (step === questions.length - 1) {
-        setFinished(true);
+        setFinished(true); // 💡 CAMBIAR: En lugar de navegar, mostramos la victoria
 
         setTimeout(() => {
-          addLetra(letra);
-          nextPista();
-          nav("/");
-        }, 1200);
+          setShowVictory(true);
+        }, 800);
       } else {
+        // Si no es la última, avanzar a la siguiente pregunta
         setStep(step + 1);
       }
-    }
+    } // Nota: Si la respuesta es incorrecta, la lógica actual no hace nada,
+    // lo cual generalmente está bien en un juego simple.
+  }
+
+  // 💡 RENDERIZADO CONDICIONAL DE LA PANTALLA DE VICTORIA
+  if (showVictory) {
+    return <GameVictory letra={letra} onContinue={handleVictoryContinue} />;
   }
 
   return (
     <div className="quiz-container">
-      <h1>Quiz mágico</h1>
-
-      <h2>{questions[step].q}</h2>
-
+      <h1>Quiz mágico</h1> <h2>{questions[step].q}</h2>
       <div className="quiz-options">
         {questions[step].a.map((ans, i) => (
           <button key={i} className="quiz-btn" onClick={() => answer(i)}>
@@ -59,8 +72,6 @@ export default function GameQuiz({ letra = "O" }) {
           </button>
         ))}
       </div>
-
-      {finished && <div className="quiz-win">¡Muy bien! Letra {letra}</div>}
     </div>
   );
 }

@@ -1,0 +1,145 @@
+/* 1. Overlay que cubre toda la pantalla - MODIFICADO */
+.victory-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0d1a26; /* Fondo azul oscuro invernal */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 1000;
+  color: white;
+  animation: fadeIn 0.5s ease-out;
+  overflow: hidden; /* Asegura que los copos de nieve no desborden */
+}
+
+/* El contenido (texto y letra) debe estar por encima de los copos */
+.victory-content {
+  position: relative; /* Para que su z-index funcione contra la nieve */
+  z-index: 1001; /* Mayor que el overlay */
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 0.5em;
+  color: #e0f2f7; /* Color más brillante para texto */
+}
+
+.victory-message {
+  font-size: 1.2em;
+  margin-bottom: 2em;
+  color: #b0e0e6;
+}
+
+/* 2. Estilos para la letra ganadora - SIN CAMBIOS SIGNIFICATIVOS*/
+.winning-letter-box {
+  margin-top: 50px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: gold;
+  box-shadow: 0 0 40px gold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: pulse 1s infinite alternate;
+}
+
+.winning-letter-reveal {
+  font-size: 120px;
+  font-weight: bold;
+  color: #a00;
+  transform: scale(0);
+  animation: letterPop 0.5s forwards 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.27);
+}
+
+/* Animaciones Generales */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 30px gold;
+  }
+  to {
+    transform: scale(1.05);
+    box-shadow: 0 0 60px gold;
+  }
+}
+
+@keyframes letterPop {
+  to {
+    transform: scale(1);
+  }
+}
+
+/* ❄️❄️❄️ Animación de Copos de Nieve ❄️❄️❄️ */
+
+/* Generar múltiples copos de nieve usando pseudoelementos y box-shadow */
+.victory-overlay::before,
+.victory-overlay::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  pointer-events: none; /* Permite interactuar con el contenido debajo */
+  z-index: 1; /* Estará por debajo del .victory-content */
+}
+
+/* Estilos para los copos de nieve */
+/* Aquí usamos box-shadow para crear muchos "puntos" (copos) */
+/* El valor inicial es un solo punto. Javascript podría generar esto dinámicamente */
+/* Pero para CSS puro, replicamos el patrón de 'snow' de ejemplos populares */
+@keyframes snow {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 500px 1000px;
+  } /* Desplaza los copos hacia abajo */
+}
+
+@keyframes snow-small {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 250px 500px;
+  }
+}
+
+/* Copos de nieve grandes */
+.victory-overlay::before {
+  animation: snow 10s linear infinite; /* Animación de caída */
+  background-image: radial-gradient(white 1px, transparent 0),
+    radial-gradient(white 1px, transparent 0),
+    radial-gradient(white 2px, transparent 0);
+  background-size: 500px 500px, 300px 300px, 200px 200px; /* Tamaño de los patrones */
+  background-repeat: repeat;
+  opacity: 0.8;
+}
+
+/* Copos de nieve más pequeños y con diferente velocidad/dirección para más realismo */
+.victory-overlay::after {
+  animation: snow-small 15s linear infinite reverse; /* Caída más lenta y en sentido contrario (para variación) */
+  background-image: radial-gradient(white 0.5px, transparent 0),
+    radial-gradient(white 0.5px, transparent 0),
+    radial-gradient(white 1px, transparent 0);
+  background-size: 250px 250px, 150px 150px, 100px 100px;
+  background-repeat: repeat;
+  opacity: 0.6;
+}

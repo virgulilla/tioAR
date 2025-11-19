@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
 import "./GameMemory.css";
+import GameVictory from "../components/GameVictory";
 
 import matchSound from "../assets/sounds/match.mp3";
 
@@ -13,6 +14,7 @@ export default function GameMemory({ letra = "R" }) {
   const [selected, setSelected] = useState([]);
   const [matched, setMatched] = useState([]);
   const [finished, setFinished] = useState(false);
+  const [showVictory, setShowVictory] = useState(false);
 
   const nav = useNavigate();
   const { addLetra } = useLetras();
@@ -82,12 +84,20 @@ export default function GameMemory({ letra = "R" }) {
       setFinished(true);
 
       setTimeout(() => {
-        addLetra(letra);
-        nextPista();
-        nav("/");
-      }, 1000);
+        setShowVictory(true); // <-- Mostrar la pantalla de victoria
+      }, 800);
     }
-  }, [matched]);
+  }, [matched, cards.length]);
+
+  function handleVictoryContinue() {
+    addLetra(letra);
+    nextPista();
+    nav("/");
+  }
+
+  if (showVictory) {
+    return <GameVictory letra={letra} onContinue={handleVictoryContinue} />;
+  }
 
   return (
     <div className="memory-container">
@@ -110,12 +120,6 @@ export default function GameMemory({ letra = "R" }) {
           );
         })}
       </div>
-
-      {finished && (
-        <div className="memory-finished">
-          ¡Muy bien! Has ganado la letra <strong>{letra}</strong> 🎉
-        </div>
-      )}
 
       {/* Audios */}
       <audio ref={matchRef} src={matchSound} preload="auto" />
