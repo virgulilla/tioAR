@@ -18,8 +18,8 @@ export default function GameBlow({ letra = "U" }) {
       mic.connect(analyser);
 
       const data = new Uint8Array(analyser.fftSize);
-      const SENSITIVITY_FACTOR = 5000;
-      const NOISE_THRESHOLD = 10;
+      const SENSITIVITY_FACTOR = 4000;
+      const NOISE_THRESHOLD = 8;
 
       function loop() {
         analyser.getByteTimeDomainData(data);
