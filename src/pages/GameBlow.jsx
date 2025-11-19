@@ -18,14 +18,14 @@ export default function GameBlow({ letra = "U" }) {
       mic.connect(analyser);
 
       const data = new Uint8Array(analyser.fftSize);
-      const SENSITIVITY_FACTOR = 1500;
+      const SENSITIVITY_FACTOR = 8000;
+      const NOISE_THRESHOLD = 10;
 
       function loop() {
         analyser.getByteTimeDomainData(data);
         let vol = data.reduce((a, b) => a + Math.abs(b - 128), 0);
         const adjustedVol = vol / SENSITIVITY_FACTOR;
-        if (adjustedVol > 5) {
-          // <-- UMBLAR DE RUIDO: Ignora valores muy bajos (ajustar si es necesario)
+        if (adjustedVol > NOISE_THRESHOLD) {
           setPower((p) => Math.min(100, p + adjustedVol));
         }
         requestAnimationFrame(loop);
