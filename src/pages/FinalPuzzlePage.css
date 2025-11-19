@@ -1,29 +1,128 @@
+/* --- Estilos Base --- */
 .final-container {
   text-align: center;
-  padding: 40px;
+  padding: 20px 5vw;
+  /* El background del contenedor principal debe ser el color base */
+  background-color: #f8f8f8;
+  min-height: 100vh; /* Asegura que la nieve cubra toda la página */
+  position: relative; /* Necesario para posicionar la nieve */
+  overflow: hidden; /* Oculta los copos que caen fuera de pantalla */
 }
 
-.letters-stage {
-  position: relative;
-  width: 100%;
-  height: 300px;
-  margin-top: 40px;
+/* ... [Otros estilos de h1, puzzle-instruction, etc. se mantienen] ... */
+
+/* Estilo para el mensaje de éxito */
+.success-message {
+  color: #4caf50;
+  font-weight: bold;
+  margin-top: 15px;
+  font-size: 1.2rem;
 }
 
-.flying-letter {
+/* --- ESTILOS DE PUZLE RESPONSIVE --- */
+.letters-stage.interactive-stage {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  min-height: 80px;
+  margin: 20px auto;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  transition: border 0.3s ease; /* Transición para el borde al resolver */
+}
+
+.puzzle-letter {
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  font-weight: 700;
+  margin: 10px 5px;
+  padding: 5px 10px;
+  border: 2px solid #ffca28;
+  border-radius: 8px;
+  cursor: grab;
+  user-select: none;
+  flex-shrink: 0;
+  transition: all 0.1s ease;
+}
+
+/* Estilo de la letra cuando el puzle está resuelto */
+.solved-letter {
+  border-color: #4caf50 !important;
+  color: #4caf50;
+  transform: scale(1.05);
+}
+
+/* --- ANIMACIÓN DE NIEVE (SNOW FALL) --- */
+
+/* Keyframes para el movimiento de caída (fall) y el parpadeo (shake) */
+@keyframes snow-fall {
+  0% {
+    transform: translateY(-10%);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 1;
+  }
+}
+
+@keyframes snow-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(20px);
+  }
+}
+
+/* La clase que activa el efecto de nieve */
+.snow-background {
+  /* Fondo que simula el cielo o la noche */
+  background: #004d40;
+}
+
+/* Creación de los copos de nieve */
+.snow-background::before,
+.snow-background::after {
+  content: "";
   position: absolute;
-  font-size: 60px;
-  font-weight: bold;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Generar múltiples sombras blancas (copos) con box-shadow */
+  box-shadow: 10px 10px 1px #fff, 20px 20px 3px #fff, 50px 50px 2px #fff,
+    /* ... Añadir más coordenadas y tamaños aleatorios para simular la nieve ... */
+      70px 70px 1px #fff,
+    90px 90px 3px #fff, 110px 110px 2px #fff, 130px 130px 1px #fff,
+    150px 150px 3px #fff, 170px 170px 2px #fff,
+    /* Usamos varias capas (::before, ::after) para mayor densidad */ 200px
+      200px 1px #fff,
+    220px 220px 3px #fff, 240px 240px 2px #fff;
+  /* Repetir el patrón usando un fondo de color transparente */
+  background: transparent;
+
+  /* Configuración de animación */
+  animation: snow-fall 20s linear infinite, snow-shake 10s alternate infinite;
+  z-index: 1;
 }
 
-.final-audio-btn {
-  margin-top: 20px;
-  padding: 12px 20px;
-  font-size: 18px;
-  background: #ffca28;
-  border: 3px solid #ff9800;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: bold;
+/* Ajuste para la segunda capa (::after) con diferentes tiempos y posiciones */
+.snow-background::after {
+  left: 50%;
+  top: -50%;
+  animation: snow-fall 15s linear infinite,
+    snow-shake 8s alternate-reverse infinite;
+  /* Diferentes sombras para más variedad */
+  box-shadow: 5px 5px 2px #fff, 15px 15px 1px #fff, 35px 35px 3px #fff,
+    55px 55px 2px #fff, 75px 75px 1px #fff, 95px 95px 3px #fff,
+    115px 115px 2px #fff;
+}
+
+/* Asegurar que el contenido del puzle esté por encima de la nieve */
+.final-container > * {
+  position: relative;
+  z-index: 2;
 }
