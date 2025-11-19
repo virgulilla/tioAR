@@ -2,14 +2,11 @@
 /* --- WRAPPER PARA EL RADAR Y LA DISTANCIA --- */
 /* ------------------------------------------- */
 .radar-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 20px auto;
-
-    /* Variable CSS para feedback de dirección incorrecta */
-    --is-moving-away: 0; /* 0 o 1, controlado por JS */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
 }
 
 /* ------------------------------------------- */
@@ -17,95 +14,111 @@
 /* ------------------------------------------- */
 
 .radar-container {
-    position: relative;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    box-sizing: content-box; /* Asegura que padding/border no cambien el tamaño */
+  position: relative;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: content-box;
 
-    /* PROXIMIDAD DINÁMICA (Controlada por --proximity en el JSX) */
-    --hue-start: 120; /* Verde */
-    --hue-end: 45;   /* Dorado/Naranja */
-    --hue: calc(var(--hue-start) - var(--proximity, 0) * (var(--hue-start) - var(--hue-end)));
-    
-    filter: brightness(calc(1 + var(--proximity, 0) * 0.2)); 
+  /* PROXIMIDAD DINÁMICA (Controlada por --proximity en el JSX) */
+  --hue-start: 120; /* Verde */
+  --hue-end: 45; /* Dorado/Naranja */
+  --hue: calc(
+    var(--hue-start) - var(--proximity, 0) * (var(--hue-start) - var(--hue-end))
+  );
 
-    background: radial-gradient(circle, 
-        hsl(var(--hue), 100%, 80%) 0%, 
-        hsl(var(--hue), 80%, 65%) 60%, 
-        hsl(var(--hue), 80%, 45%) 100%
-    );
+  filter: brightness(calc(1 + var(--proximity, 0) * 0.2));
 
-    border: 6px solid hsl(var(--hue), 70%, 30%);
-    
-    animation-name: radarPulse;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-duration: calc(2s - var(--proximity, 0) * 1s); 
+  background: radial-gradient(
+    circle,
+    hsl(var(--hue), 100%, 80%) 0%,
+    hsl(var(--hue), 80%, 65%) 60%,
+    hsl(var(--hue), 80%, 45%) 100%
+  );
+
+  border: 6px solid hsl(var(--hue), 70%, 30%);
+
+  animation-name: radarPulse;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-duration: calc(2s - var(--proximity, 0) * 1s);
 }
 
 /* ------------------------------------------- */
-/* --- FLECHA DE DIRECCIÓN --- */
+/* --- FLECHA DE DIRECCIÓN (IMG) --- */
 /* ------------------------------------------- */
 .radar-arrow {
-    width: 90px;
-    height: 90px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transition: transform 0.15s linear;
-    user-select: none;
-    pointer-events: none;
-    /* Estilos de la flecha, se aplican sobre el `style` inline */
+  width: 90px;
+  height: 90px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transition: transform 0.15s linear;
+  user-select: none;
+  pointer-events: none;
 }
 
 /* Animación de parpadeo en rojo para la flecha */
 .radar-arrow.flicker-red {
-    animation: flickerRed 0.5s infinite alternate;
+  animation: flickerRed 0.5s infinite alternate;
 }
 
 @keyframes flickerRed {
-    0% { filter: brightness(1) drop-shadow(0 0 5px rgba(255, 0, 0, 0.5)); }
-    100% { filter: brightness(1.5) drop-shadow(0 0 10px red); }
+  /* Usamos el filtro drop-shadow para crear el efecto de brillo rojo */
+  0% {
+    filter: brightness(1) drop-shadow(0 0 5px rgba(255, 0, 0, 0.5));
+  }
+  100% {
+    filter: brightness(1.5) drop-shadow(0 0 10px red);
+  }
 }
-
 
 /* ------------------------------------------- */
 /* --- DISTANCIA DESTACADA --- */
 /* ------------------------------------------- */
 
 .radar-distance {
-    margin-top: 20px; 
-    z-index: 10; 
-    
-    font-size: 38px; 
-    font-weight: 900; 
-    color: white; 
-    text-shadow: 
-        0 0 8px rgba(0, 0, 0, 0.9), 
-        0 0 15px hsl(var(--hue), 100%, 70%); 
-    
-    padding: 8px 15px;
-    border-radius: 8px;
-    background-color: rgba(0, 0, 0, 0.3); 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+  margin-top: 20px;
+  z-index: 10;
 
-    /* Animación de parpadeo para la distancia si se aleja */
-    animation: flickerDistanceRed 0.7s infinite alternate;
-    animation-play-state: running; /* Por defecto */
-    /* Controlar la animación con la variable CSS --is-moving-away */
-    animation-play-state: var(--is-moving-away, 0) == 1 ? running : paused;
+  font-size: 38px;
+  font-weight: 900;
+
+  /* Colores por defecto (acercándose/normal) */
+  color: white;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.9), 0 0 15px hsl(var(--hue), 100%, 70%);
+
+  padding: 8px 15px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+  /* Transición suave para el color y sombra */
+  transition: color 0.3s, text-shadow 0.3s, opacity 0.3s;
 }
 
-@keyframes flickerDistanceRed {
-    0% { color: white; text-shadow: 0 0 8px rgba(0, 0, 0, 0.9), 0 0 15px hsl(var(--hue), 100%, 70%); }
-    100% { color: red; text-shadow: 0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px red; }
+/* ⚠️ Estilos si nos estamos alejando (Clase 'is-away' añadida por JS) */
+.radar-distance.is-away {
+  color: red;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px red;
+
+  /* Activar animación de parpadeo */
+  animation: flickerDistance 0.7s infinite alternate;
 }
 
+/* Keyframes para el parpadeo de la distancia */
+@keyframes flickerDistance {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
 
 /* ------------------------------------------- */
 /* --- ANIMACIONES GENERALES DEL RADAR --- */
@@ -113,32 +126,32 @@
 
 /* Animación del Pulso (Box-shadow) */
 @keyframes radarPulse {
-    0% {
-        box-shadow: 0 0 0 0 hsl(var(--hue), 100%, 50%, 0.4);
-    }
-    70% {
-        box-shadow: 0 0 20px 25px rgba(0, 255, 0, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);
-    }
+  0% {
+    box-shadow: 0 0 0 0 hsl(var(--hue), 100%, 50%, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 20px 25px rgba(0, 255, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);
+  }
 }
 
 /* Halo de radar moviéndose (no depende de la proximidad) */
 .radar-halo {
-    position: absolute;
-    width: 240px;
-    height: 240px;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    animation: haloSpin 3s linear infinite;
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: haloSpin 3s linear infinite;
 }
 
 @keyframes haloSpin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
