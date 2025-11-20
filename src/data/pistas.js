@@ -19,8 +19,8 @@ export const NARRATIVAS = [
   {
     id: 1,
     name: "Parque Central",
-    lat: 41.68606, //41.663157,
-    lng: 2.364537, //2.355549,
+    lat: 41.663157, //41.68606,
+    lng: 2.355549, //2.364537,
     riddle:
       "Antes de jugar, todos los participantes teneis que pintaros la cara.",
     game: "memory",
