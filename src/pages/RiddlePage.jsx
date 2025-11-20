@@ -25,7 +25,9 @@ export default function RiddlePage() {
     }
 
     // Validación y comparación del código
-    if (inputCode.toUpperCase() === pista.code.toUpperCase()) {
+    const noSpacesCode = inputCode.replace(/\s/g, "");
+    console.log(noSpacesCode.toUpperCase(), pista.code.toUpperCase());
+    if (noSpacesCode.toUpperCase() === pista.code.toUpperCase()) {
       setError(null);
       nav(`/juego/${pista.game}`);
     } else {

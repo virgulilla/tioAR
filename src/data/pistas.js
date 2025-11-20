@@ -27,34 +27,36 @@ export const NARRATIVAS = [
     letra: "H",
     narradorTexto:
       "Ah, aventurero… Aquí se guardan recuerdos ocultos del bosque mágico. Si consigues emparejar las imágenes correctas, liberarás un trocito de la magia del Tió.",
-    narradorAudio: memoryAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
+    narradorAudio: memoryAudio,
     code: "ARBOL12",
   },
   {
     id: 2,
-    name: "Fuente de los Patos",
+    name: "Estanque de las barcas",
     lat: 41.663377,
     lng: 2.355618,
     riddle:
-      "Teneis que demostrar vuestra habilidad de pesca antes de permitiros jugar. Veis la caña de pescar? Quien se atreve a coger el patito?",
+      "Teneis coger al barquito usando la caña de pescar. Quien logre atraparlo una nueva pista desvelará",
     game: "globos",
     letra: "U",
     narradorTexto:
       "Shhh… escucha bien. Los patos del estanque susurran pistas escondidas. Atrapa los globos correctos y descifrarás su secreto.",
-    narradorAudio: globosAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
+    narradorAudio: globosAudio,
+    code: "LIBRO",
   },
   {
     id: 3,
-    name: "Banco del Gran Árbol",
+    name: "El arbol mágico",
     lat: 41.663126,
     lng: 2.356083,
     riddle:
-      "Para poder acceder al siguiente juego, debeis reunir 10 hojas magicas del arbol",
+      "El árbol mágico esconde entre su tronco o ramas un gran secreto. ¡El Tió ha escondido una nota cerca que revela la clave! ¡Búscala!",
     game: "quiz",
     letra: "E",
     narradorTexto:
       "Este viejo árbol ha visto pasar cientos de inviernos… y sólo comparte su sabiduría con quienes se atreven a escuchar. Responde a sus preguntas y te revelará otra parte de la magia del Tió.",
-    narradorAudio: quizAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
+    narradorAudio: quizAudio,
+    code: "MUÑECODENIEVE",
   },
   {
     id: 4,
