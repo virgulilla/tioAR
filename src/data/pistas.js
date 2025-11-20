@@ -22,12 +22,13 @@ export const NARRATIVAS = [
     lat: 41.663157, //41.68606,
     lng: 2.355549, //2.364537,
     riddle:
-      "Antes de jugar, todos los participantes teneis que pintaros la cara.",
+      "Teneis que pasaros el globo entre todos sin que se caiga al suelo durante 30 segundos.",
     game: "memory",
     letra: "H",
     narradorTexto:
       "Ah, aventurero… Aquí se guardan recuerdos ocultos del bosque mágico. Si consigues emparejar las imágenes correctas, liberarás un trocito de la magia del Tió.",
     narradorAudio: memoryAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
+    code: "ARBOL12",
   },
   {
     id: 2,
