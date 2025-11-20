@@ -19,8 +19,8 @@ export const NARRATIVAS = [
   {
     id: 1,
     name: "Parque Central",
-    lat: 41.686032,
-    lng: 2.364821,
+    lat: 41.663157,
+    lng: 2.355549,
     riddle:
       "Antes de jugar, todos los participantes teneis que pintaros la cara.",
     game: "memory",
@@ -32,8 +32,8 @@ export const NARRATIVAS = [
   {
     id: 2,
     name: "Fuente de los Patos",
-    lat: 41.686069,
-    lng: 2.364557,
+    lat: 41.663377,
+    lng: 2.355618,
     riddle:
       "Teneis que demostrar vuestra habilidad de pesca antes de permitiros jugar. Veis la caña de pescar? Quien se atreve a coger el patito?",
     game: "globos",
@@ -45,8 +45,8 @@ export const NARRATIVAS = [
   {
     id: 3,
     name: "Banco del Gran Árbol",
-    lat: 41.3922,
-    lng: 2.1633,
+    lat: 41.663126,
+    lng: 2.356083,
     riddle:
       "Para poder acceder al siguiente juego, debeis reunir 10 hojas magicas del arbol",
     game: "quiz",
@@ -58,8 +58,8 @@ export const NARRATIVAS = [
   {
     id: 4,
     name: "Puente Pequeñito",
-    lat: 41.3923,
-    lng: 2.1634,
+    lat: 41.663375,
+    lng: 2.355762,
     riddle:
       "Adivinad que teneis que hacer. Correcto, debeis cruzar todos el puente sin caeros al agua.",
     game: "puzzle",
@@ -71,10 +71,10 @@ export const NARRATIVAS = [
   {
     id: 5,
     name: "Piedra Misteriosa",
-    lat: 41.3924,
-    lng: 2.1635,
+    lat: 41.663139,
+    lng: 2.356191,
     riddle:
-      "Antes de jugar, teneis que cruzar todos por debajo de la cuerda sin tocarla ni caer de culo al suelo",
+      "Antes de jugar, teneis que encontrar la piedra misteriosa y cruzar todos por debajo de la cuerda sin tocarla ni caer de culo al suelo",
     game: "codigo",
     letra: "T",
     narradorTexto:
@@ -84,8 +84,8 @@ export const NARRATIVAS = [
   {
     id: 6,
     name: "Jardín de las Flores",
-    lat: 41.3925,
-    lng: 2.1636,
+    lat: 41.662953,
+    lng: 2.355687,
     riddle: "Las flores brillan cuando soplas… ¿Qué ocurrirá?",
     game: "soplar",
     letra: "O",
