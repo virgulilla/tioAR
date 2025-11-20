@@ -109,7 +109,7 @@ export default function Radar({
   }, [distance, nav, next, startDynamicBeep]);
 
   // Cálculo de la rotación
-  const ARROW_OFFSET = 135;
+  const ARROW_OFFSET = 180;
   const rotation = heading == null ? 0 : bearing - heading + ARROW_OFFSET;
 
   // Mensaje de distancia para niños (cualitativo/numérico)
