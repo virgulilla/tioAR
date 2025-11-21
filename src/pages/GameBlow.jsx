@@ -40,7 +40,7 @@ export default function GameBlow({ letra = "U" }) {
         const data = new Uint8Array(analyser.frequencyBinCount);
 
         let smoothed = 0;
-        const IMPULSE_THRESHOLD = 75; // pico de soplido
+        const IMPULSE_THRESHOLD = 60; // pico de soplido
         const RISE_SPEED = 0.02; // velocidad de llenado
         const DECAY = 0.92; // evita falsos positivos
 
