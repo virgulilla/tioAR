@@ -17,25 +17,44 @@ export default function GameBlow({ letra = "U" }) {
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       const ctx = new AudioContext();
       const mic = ctx.createMediaStreamSource(stream);
-      const analyser = ctx.createAnalyser();
-      mic.connect(analyser);
 
-      const data = new Uint8Array(analyser.fftSize);
-      const SENSITIVITY_FACTOR = 4000;
-      const NOISE_THRESHOLD = 8;
+      // 1️⃣ Filtro paso alto para eliminar voces graves
+      const highpass = ctx.createBiquadFilter();
+      highpass.type = "highpass";
+      highpass.frequency.value = 1200; // soplido = frecuencias altas
+
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 256;
+
+      mic.connect(highpass);
+      highpass.connect(analyser);
+
+      const data = new Uint8Array(analyser.frequencyBinCount);
+
+      const BOOST = 1.8; // Multiplicador de sensibilidad
+      const THRESHOLD = 12; // Umbral más bajo
 
       function loop() {
-        analyser.getByteTimeDomainData(data);
-        let vol = data.reduce((a, b) => a + Math.abs(b - 128), 0);
-        const adjustedVol = vol / SENSITIVITY_FACTOR;
-        if (adjustedVol > NOISE_THRESHOLD) {
-          setPower((p) => Math.min(100, p + adjustedVol));
+        analyser.getByteFrequencyData(data);
+
+        // 🔥 medir energía EN FRECUENCIAS ALTAS (soplidos)
+        const highFreqEnergy =
+          data
+            .slice(30) // Ignorar bajas frecuencias (voz)
+            .reduce((a, b) => a + b, 0) / 10;
+
+        const vol = highFreqEnergy * BOOST;
+
+        if (vol > THRESHOLD) {
+          setPower((p) => Math.min(100, p + vol / 25));
         }
+
         requestAnimationFrame(loop);
       }
+
       loop();
     });
-  }, []); // 💡 MODIFICACIÓN del useEffect de finalización
+  }, []);
 
   useEffect(() => {
     if (power >= 100) {
