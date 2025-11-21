@@ -114,3 +114,21 @@ body {
     transform: translateY(0);
   }
 }
+.secret-sound-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2.2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ffd966; /* Dorado suave */
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  transition: transform 0.2s, opacity 0.2s;
+  z-index: 9999;
+}
+
+.secret-sound-button:hover {
+  transform: scale(1.15);
+  opacity: 0.9;
+}
