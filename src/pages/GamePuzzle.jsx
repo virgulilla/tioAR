@@ -4,12 +4,32 @@ import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
 import GameVictory from "../components/GameVictory"; // 💡 IMPORTAR
 import "./GamePuzzle.css";
-import p1 from "../assets/puzzle/p1.png";
-import p2 from "../assets/puzzle/p2.png";
-import p3 from "../assets/puzzle/p3.png";
-import p4 from "../assets/puzzle/p4.png";
 
-const PUZZLE_IMAGES = { 0: p1, 1: p2, 2: p3, 3: p4 };
+// --- IMPORTACIONES DE IMAGEN AJUSTADAS para 8 piezas (0 a 7) ---
+// NOTA: Asegúrate de que las imágenes p1a.png a p4b.png existan en la ruta.
+import p0 from "../assets/puzzle/0_0.png"; // Fila 0, Columna 0
+import p1 from "../assets/puzzle/0_1.png"; // Fila 0, Columna 1
+import p2 from "../assets/puzzle/0_2.png"; // Fila 0, Columna 2
+import p3 from "../assets/puzzle/0_3.png"; // Fila 0, Columna 3
+import p4 from "../assets/puzzle/1_0.png"; // Fila 1, Columna 0
+import p5 from "../assets/puzzle/1_1.png"; // Fila 1, Columna 1
+import p6 from "../assets/puzzle/1_2.png"; // Fila 1, Columna 2
+import p7 from "../assets/puzzle/1_3.png"; // Fila 1, Columna 3
+
+// Mapeo de 8 piezas
+const PUZZLE_IMAGES = {
+  0: p0,
+  1: p1,
+  2: p2,
+  3: p3,
+  4: p4,
+  5: p5,
+  6: p6,
+  7: p7,
+};
+
+// Número total de piezas
+const NUM_PIECES = 8;
 
 function shuffle(arr) {
   const a = arr.slice();
@@ -23,30 +43,28 @@ function shuffle(arr) {
 export default function GamePuzzle({ letra = "T" }) {
   const nav = useNavigate();
   const { addLetra } = useLetras();
-  const { nextPista } = usePistas(); // order[index] = pieceId que está en esa casilla (ej: [2,0,3,1])
+  const { nextPista } = usePistas();
 
-  const [order, setOrder] = useState([]); // para fallback en móvil (tap to swap)
-  const [selectedSlot, setSelectedSlot] = useState(null); // un flag para bloquear mientras comprobamos victoria
+  const [order, setOrder] = useState([]);
+  const [selectedSlot, setSelectedSlot] = useState(null);
   const [blocked, setBlocked] = useState(false);
-
-  const [showVictory, setShowVictory] = useState(false); // 💡 NUEVO ESTADO
+  const [showVictory, setShowVictory] = useState(false);
 
   useEffect(() => {
-    const initial = shuffle([0, 1, 2, 3]);
+    // Inicializar con un array de 8 piezas desordenadas: [0, 1, ..., 7]
+    const initial = shuffle(Array.from({ length: NUM_PIECES }, (_, i) => i));
     setOrder(initial);
     console.log("Puzzle inicial:", initial);
-  }, []); // ... (handleDragStart, handleDragOver, handleDrop, handleSlotClick — sin cambios)
+  }, []); // Drag handlers (desktop)
 
-  // Drag handlers (desktop)
   function handleDragStart(e, pieceId, fromIndex) {
-    // Guardamos el pieceId y fromIndex en dataTransfer
     e.dataTransfer.setData("text/plain", String(pieceId));
     e.dataTransfer.setData("fromIndex", String(fromIndex));
     e.dataTransfer.effectAllowed = "move";
   }
 
   function handleDragOver(e) {
-    e.preventDefault(); // necesario para permitir drop
+    e.preventDefault();
     e.dataTransfer.dropEffect = "move";
   }
 
@@ -60,15 +78,6 @@ export default function GamePuzzle({ letra = "T" }) {
     }
     const pieceId = Number(text);
     const fromIndex = Number(fromIndexStr);
-
-    console.log(
-      "drop piece",
-      pieceId,
-      "fromIndex",
-      fromIndex,
-      "toIndex",
-      toIndex
-    ); // Intercambiar: poner pieceId en toIndex, y pieza que estaba en toIndex a fromIndex
 
     setOrder((prev) => {
       const next = prev.slice();
@@ -100,36 +109,35 @@ export default function GamePuzzle({ letra = "T" }) {
   } // Comprobar victoria
 
   useEffect(() => {
-    if (order.length === 4) {
-      const isCorrect =
-        order[0] === 0 && order[1] === 1 && order[2] === 2 && order[3] === 3;
+    if (order.length === NUM_PIECES) {
+      // Comprobar si order es igual a [0, 1, 2, 3, 4, 5, 6, 7]
+      const isCorrect = order.every((pieceId, index) => pieceId === index);
+
       if (isCorrect) {
         setBlocked(true);
-        // 💡 CAMBIAR: En lugar de navegar, mostramos la victoria
         setTimeout(() => {
           setShowVictory(true);
         }, 900); // 900ms para que se asiente la imagen
       }
     } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order]);
+  }, [order]); // FUNCIÓN DE CONTINUACIÓN
 
-  // 💡 FUNCIÓN DE CONTINUACIÓN
   function handleVictoryContinue() {
     addLetra(letra);
     nextPista();
     nav("/"); // Volver al mapa/siguiente pista
-  }
+  } // RENDERIZADO CONDICIONAL
 
-  // 💡 RENDERIZADO CONDICIONAL
   if (showVictory) {
     return <GameVictory letra={letra} onContinue={handleVictoryContinue} />;
   }
 
   return (
     <div className="puzzle-container">
-      <h1>¡Monta el puzzle!</h1>
-      <p>Toca o arrastra las piezas hasta que formen la imagen.</p>
+            <h1>¡Monta el puzzle!</h1>     {" "}
+      <p>Toca o arrastra las piezas hasta que formen la imagen.</p>     {" "}
       <div className="puzzle-grid" role="grid">
+               {" "}
         {order.map((pieceId, index) => {
           const src = PUZZLE_IMAGES[pieceId];
           const isSelected = selectedSlot === index;
@@ -141,30 +149,37 @@ export default function GamePuzzle({ letra = "T" }) {
               onDragOver={handleDragOver}
               onClick={() => handleSlotClick(index)}
             >
+                           {" "}
               <img
                 draggable={true}
                 onDragStart={(e) => handleDragStart(e, pieceId, index)}
                 src={src}
                 alt={`pieza ${pieceId}`}
-                className="puzzle-piece" // evitar que el img actúe como ghost en algunos browsers:
+                className="puzzle-piece"
                 onDragEnd={() => console.log("dragend")}
               />
+                         {" "}
             </div>
           );
         })}
+             {" "}
       </div>
+           {" "}
       <div style={{ marginTop: 18 }}>
+               {" "}
         <button
           className="puzzle-reset"
           onClick={() => {
-            setOrder(shuffle([0, 1, 2, 3]));
+            setOrder(shuffle(Array.from({ length: NUM_PIECES }, (_, i) => i)));
             setSelectedSlot(null);
             setBlocked(false);
           }}
         >
-          🔁 Reiniciar puzzle
+                    🔁 Reiniciar puzzle        {" "}
         </button>
+             {" "}
       </div>
+         {" "}
     </div>
   );
 }

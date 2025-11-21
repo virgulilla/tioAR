@@ -4,17 +4,18 @@
 }
 
 .puzzle-grid {
-  width: 300px;
+  width: 600px;
   height: 300px;
   margin: auto;
   display: grid;
-  grid-template-columns: repeat(2, 150px);
+  grid-template-columns: repeat(4, 80px);
+  grid-template-rows: repeat(2, 80px);
   gap: 5px;
 }
 
 .puzzle-slot {
-  width: 150px;
-  height: 150px;
+  width: 80px;
+  height: 80px;
   background: #eee;
   border: 2px solid #ccc;
   display: flex;
