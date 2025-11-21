@@ -1,21 +1,25 @@
+/* Estilos Base para Móviles y Escritorio */
 .puzzle-container {
   text-align: center;
-  padding: 20px;
+  padding: 10px;
 }
 
 .puzzle-grid {
-  width: 600px;
-  height: 300px;
+  /* Cuadrícula base (Móvil) */
+  width: min(90vw, 400px); /* Usa 90% del ancho del viewport, máximo 400px */
+  height: auto;
+  aspect-ratio: 1 / 1; /* Mantiene la forma cuadrada (3x3) */
   margin: auto;
   display: grid;
-  grid-template-columns: repeat(4, 80px);
-  grid-template-rows: repeat(2, 80px);
+
+  /* 3 columnas fluidas y 3 filas fluidas */
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   gap: 5px;
 }
 
 .puzzle-slot {
-  width: 80px;
-  height: 80px;
+  /* Las piezas ya no tienen tamaño fijo, sino que ocupan 1fr de la cuadrícula */
   background: #eee;
   border: 2px solid #ccc;
   display: flex;
@@ -27,7 +31,7 @@
 
 .puzzle-slot.selected {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   border-color: #66bb6a;
 }
 
@@ -37,5 +41,15 @@
   cursor: grab;
   pointer-events: auto;
   user-select: none;
-  -webkit-user-drag: element; /* intenta permitir drag en Safari */
+  -webkit-user-drag: element;
+}
+
+/* MEDIA QUERY: Tamaño fijo para Escritorio (si prefieres un tamaño absoluto en pantallas grandes) */
+@media (min-width: 600px) {
+  .puzzle-grid {
+    width: 450px; /* 3 columnas * 150px = 450px */
+    height: 450px;
+    grid-template-columns: repeat(3, 150px);
+    grid-template-rows: repeat(3, 150px);
+  }
 }

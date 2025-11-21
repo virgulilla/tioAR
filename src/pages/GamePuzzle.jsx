@@ -5,18 +5,19 @@ import { usePistas } from "../context/PistasContext";
 import GameVictory from "../components/GameVictory"; // 💡 IMPORTAR
 import "./GamePuzzle.css";
 
-// --- IMPORTACIONES DE IMAGEN AJUSTADAS para 8 piezas (0 a 7) ---
-// NOTA: Asegúrate de que las imágenes p1a.png a p4b.png existan en la ruta.
+// --- IMPORTACIONES DE IMAGEN AJUSTADAS para 9 piezas (0 a 8) ---
+// La nomenclatura ahora sigue Fila_Columna (3 filas x 3 columnas)
 import p0 from "../assets/puzzle/0_0.png"; // Fila 0, Columna 0
 import p1 from "../assets/puzzle/0_1.png"; // Fila 0, Columna 1
 import p2 from "../assets/puzzle/0_2.png"; // Fila 0, Columna 2
-import p3 from "../assets/puzzle/0_3.png"; // Fila 0, Columna 3
-import p4 from "../assets/puzzle/1_0.png"; // Fila 1, Columna 0
-import p5 from "../assets/puzzle/1_1.png"; // Fila 1, Columna 1
-import p6 from "../assets/puzzle/1_2.png"; // Fila 1, Columna 2
-import p7 from "../assets/puzzle/1_3.png"; // Fila 1, Columna 3
+import p3 from "../assets/puzzle/1_0.png"; // Fila 1, Columna 0
+import p4 from "../assets/puzzle/1_1.png"; // Fila 1, Columna 1
+import p5 from "../assets/puzzle/1_2.png"; // Fila 1, Columna 2
+import p6 from "../assets/puzzle/2_0.png"; // Fila 2, Columna 0 (NUEVA FILA)
+import p7 from "../assets/puzzle/2_1.png"; // Fila 2, Columna 1 (NUEVA FILA)
+import p8 from "../assets/puzzle/2_2.png"; // Fila 2, Columna 2 (NUEVA PIEZA)
 
-// Mapeo de 8 piezas
+// Mapeo de 9 piezas
 const PUZZLE_IMAGES = {
   0: p0,
   1: p1,
@@ -26,10 +27,11 @@ const PUZZLE_IMAGES = {
   5: p5,
   6: p6,
   7: p7,
+  8: p8, // NUEVA PIEZA
 };
 
 // Número total de piezas
-const NUM_PIECES = 8;
+const NUM_PIECES = 9; // <--- CAMBIO CLAVE
 
 function shuffle(arr) {
   const a = arr.slice();
@@ -51,8 +53,8 @@ export default function GamePuzzle({ letra = "T" }) {
   const [showVictory, setShowVictory] = useState(false);
 
   useEffect(() => {
-    // Inicializar con un array de 8 piezas desordenadas: [0, 1, ..., 7]
-    const initial = shuffle(Array.from({ length: NUM_PIECES }, (_, i) => i));
+    // Inicializar con un array de 9 piezas desordenadas: [0, 1, ..., 8]
+    const initial = shuffle(Array.from({ length: NUM_PIECES }, (_, i) => i)); // <--- AJUSTE
     setOrder(initial);
     console.log("Puzzle inicial:", initial);
   }, []); // Drag handlers (desktop)
@@ -110,14 +112,14 @@ export default function GamePuzzle({ letra = "T" }) {
 
   useEffect(() => {
     if (order.length === NUM_PIECES) {
-      // Comprobar si order es igual a [0, 1, 2, 3, 4, 5, 6, 7]
-      const isCorrect = order.every((pieceId, index) => pieceId === index);
+      // Comprobar si order es igual a [0, 1, 2, 3, 4, 5, 6, 7, 8]
+      const isCorrect = order.every((pieceId, index) => pieceId === index); // <--- AJUSTE AUTOMÁTICO
 
       if (isCorrect) {
         setBlocked(true);
         setTimeout(() => {
           setShowVictory(true);
-        }, 900); // 900ms para que se asiente la imagen
+        }, 900);
       }
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]); // FUNCIÓN DE CONTINUACIÓN
@@ -125,7 +127,7 @@ export default function GamePuzzle({ letra = "T" }) {
   function handleVictoryContinue() {
     addLetra(letra);
     nextPista();
-    nav("/"); // Volver al mapa/siguiente pista
+    nav("/");
   } // RENDERIZADO CONDICIONAL
 
   if (showVictory) {
