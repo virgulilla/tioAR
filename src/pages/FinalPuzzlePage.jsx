@@ -1,14 +1,11 @@
-import { useRef, useState } from "react";
+import { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { useNavigate } from "react-router-dom";
+import * as Tone from "tone";
 import "./FinalPuzzlePage.css";
-import finalAudio from "../assets/sounds/final.mp3";
-// import Narrador from "./Narrador"; // Para la etapa final
 
-// --- CONSTANTES Y ESTADOS ---
-const STAGE_PUZZLE = 0;
 const PALABRA_FINAL = "HUERTO";
 
-// Función auxiliar para reordenar la lista (requerida por dnd)
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
@@ -16,28 +13,60 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-export default function FinalPuzzlePage() {
-  const palabraFinal = PALABRA_FINAL;
-  const initialLetters = ["R", "U", "T", "E", "H", "O"]; // Desordenadas
+// 🔔✨ Sonido navideño con campanillas
+function playChristmasWin() {
+  const synth = new Tone.Synth({
+    oscillator: { type: "sine" },
+    envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.3 },
+  }).toDestination();
 
-  const [currentStage, setCurrentStage] = useState(STAGE_PUZZLE);
-  const [error, setError] = useState(null);
+  const reverb = new Tone.Reverb({ decay: 2, wet: 0.5 }).toDestination();
+  synth.connect(reverb);
+
+  // Pequeña melodía mágica
+  synth.triggerAttackRelease("G5", "8n"); // Campanilla 1
+  setTimeout(() => synth.triggerAttackRelease("B5", "8n"), 180); // Campanilla 2
+  setTimeout(() => synth.triggerAttackRelease("D6", "8n"), 360); // Campanilla 3
+}
+
+export default function FinalPuzzlePage() {
+  const navigate = useNavigate();
+
+  const initialLetters = ["R", "U", "T", "E", "H", "O"];
 
   const [puzzleState, setPuzzleState] = useState(
     initialLetters.map((letter, i) => ({
-      id: `item-${i}`, // El ID DEBE ser una string única
+      id: `item-${i}`,
       content: letter,
     }))
   );
 
-  const audioRef = useRef(null);
+  const [isSolved, setIsSolved] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
 
-  // --- Lógica de Drag and Drop (ÚNICA FUNCIÓN) ---
-  const onDragEnd = (result) => {
-    // 1. Si se soltó fuera del Droppable o la posición es la misma, no hacer nada
-    if (!result.destination) {
-      return;
+  useEffect(() => {
+    const currentWord = puzzleState.map((l) => l.content).join("");
+
+    if (currentWord === PALABRA_FINAL && !isSolved) {
+      setIsSolved(true);
+
+      // 🔔 Sonido navideño
+      playChristmasWin();
+
+      // 🌫️ Fade out suave
+      setTimeout(() => {
+        setFadeOut(true);
+      }, 300);
+
+      // ⏭️ Pasar a la pantalla final
+      setTimeout(() => {
+        navigate("/final-tio");
+      }, 1300);
     }
+  }, [puzzleState, isSolved, navigate]);
+
+  const onDragEnd = (result) => {
+    if (!result.destination) return;
 
     const items = reorder(
       puzzleState,
@@ -46,106 +75,46 @@ export default function FinalPuzzlePage() {
     );
 
     setPuzzleState(items);
-    setError(null);
   };
-
-  // --- Lógica de Comprobación y Audio ---
-  const checkPuzzle = () => {
-    const currentWord = puzzleState.map((item) => item.content).join("");
-
-    if (currentWord === palabraFinal) {
-      reproducirFinal();
-    } else {
-      setError("❌ ¡Ese no es el orden correcto! Inténtalo de nuevo.");
-    }
-  };
-
-  function reproducirFinal() {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    // Deshabilitar el botón Comprobar durante la reproducción
-    // ...
-
-    audio
-      .play()
-      .then(() => {
-        audio.onended = () => {
-          // setCurrentStage(STAGE_NARRATOR); // Cambiar al Narrador
-        };
-      })
-      .catch((err) => {
-        console.error("Fallo al reproducir audio:", err);
-        setError("Error al iniciar el audio. ¿Permiso?");
-      });
-  }
-
-  // if (currentStage === STAGE_NARRATOR) {
-  //     // return <Narrador audioSrc={finalAudio} texto="¡Me has encontrado! Corre ven a buscarme." autoContinue={true} />;
-  // }
 
   return (
-    <div className="final-container">
-      <h1>¡Felicidades! Has encontrado todas las letras</h1>
+    <div className={`final-container ${fadeOut ? "fade-out" : ""}`}>
+      <h1>¡Último Pasito!</h1>
       <p className="puzzle-instruction">
-        Ordena las letras para formar la palabra final.
+        Ordenad las letras para descubrir la palabra secreta…
       </p>
 
-      <button className="final-audio-btn" onClick={checkPuzzle}>
-        Comprobar Palabra
-      </button>
-
-      {error && <p className="puzzle-error">{error}</p>}
-
-      <audio ref={audioRef} src={finalAudio} preload="auto" />
-
-      {/* 💡 DragDropContext envuelve toda la lógica D&D */}
       <DragDropContext onDragEnd={onDragEnd}>
-        {/* 💡 Droppable define la zona donde se pueden soltar los Draggable */}
-        <Droppable droppableId="letras-puzle" direction="horizontal">
-          {(provided, snapshot) => (
+        <Droppable droppableId="letras" direction="horizontal">
+          {(provided) => (
             <div
               className="letters-stage interactive-stage"
               {...provided.droppableProps}
               ref={provided.innerRef}
-              // Opcional: Estilo para indicar que está siendo arrastrado
-              style={{
-                backgroundColor: snapshot.isDraggingOver
-                  ? "rgba(255, 250, 220, 0.5)"
-                  : "transparent",
-              }}
             >
               {puzzleState.map((item, index) => (
-                // 💡 Draggable hace que cada letra sea arrastrable
                 <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(provided, snapshot) => (
+                  {(provided) => (
                     <span
-                      className="puzzle-letter"
+                      className={`puzzle-letter ${
+                        isSolved ? "solved-letter" : ""
+                      }`}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      style={{
-                        ...provided.draggableProps.style,
-                        // Opcional: Ajustar el estilo mientras se arrastra
-                        backgroundColor: snapshot.isDragging
-                          ? "#ffeeaa"
-                          : "#ffffff",
-                        boxShadow: snapshot.isDragging
-                          ? "0 8px 15px rgba(0, 0, 0, 0.2)"
-                          : "0 4px 6px rgba(0, 0, 0, 0.1)",
-                      }}
                     >
                       {item.content}
                     </span>
                   )}
                 </Draggable>
               ))}
-              {provided.placeholder}{" "}
-              {/* Importante para el espacio de arrastre */}
+              {provided.placeholder}
             </div>
           )}
         </Droppable>
       </DragDropContext>
+
+      {isSolved && <p className="success-message">¡Lo habéis conseguido!</p>}
     </div>
   );
 }

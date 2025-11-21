@@ -126,3 +126,12 @@
   position: relative;
   z-index: 2;
 }
+
+.final-container {
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+
+.final-container.fade-out {
+  opacity: 0;
+}

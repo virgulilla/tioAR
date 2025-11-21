@@ -8,6 +8,7 @@ import GamePuzzle from "./pages/GamePuzzle";
 import GameBlow from "./pages/GameBlow";
 import GameFind from "./pages/GameFind";
 import FinalPuzzlePage from "./pages/FinalPuzzlePage";
+import FinalTioPage from "./pages/FinalTioPage";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
       <Route path="/juego/codigo" element={<GameFind />} />
       <Route path="/juego/soplar" element={<GameBlow />} />
       <Route path="/final" element={<FinalPuzzlePage />} />
+      <Route path="/final-tio" element={<FinalTioPage />} />
     </Routes>
   );
 }

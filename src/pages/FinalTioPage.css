@@ -1,0 +1,116 @@
+body {
+  background: black !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---- CONTENEDOR PRINCIPAL ---- */
+.tio-final-page {
+  height: 100vh;
+  width: auto;
+  background: radial-gradient(ellipse at top, #0a0a15, #000000);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+}
+
+/* ---- ANIMACIONES ---- */
+.fade-in {
+  animation: fadeIn 1.4s ease forwards;
+}
+
+.fade-up {
+  animation: fadeUp 1.8s ease forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- CONTENIDO ---- */
+.final-content {
+  max-width: 600px;
+  z-index: 10;
+}
+
+.final-title {
+  font-size: 2.4rem;
+  margin-bottom: 15px;
+  text-shadow: 0 0 15px #88ffcc;
+  color: #d7ffe9;
+}
+
+.final-text {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #e0e0e0;
+}
+
+.final-word {
+  font-size: 3rem;
+  margin: 20px 0;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 0 25px #ffd27f;
+}
+
+.final-instruction {
+  font-size: 1.3rem;
+  max-width: 90%;
+  margin: 0 auto;
+  line-height: 1.4;
+  color: #ffebe0;
+}
+
+/* Asegura que la nieve esté detrás del texto */
+.tio-final-page canvas {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.tio-final-animado {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.tio-img {
+  width: 280px;
+  max-width: 80%;
+  image-rendering: crisp-edges;
+  animation: float 2.5s ease-in-out infinite;
+}
+
+/* Suave flotación navideña */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
