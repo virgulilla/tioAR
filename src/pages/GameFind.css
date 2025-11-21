@@ -1,52 +1,75 @@
-.tilt-container {
+.find-container {
   text-align: center;
-  padding: 20px;
-  font-family: "Inter", sans-serif;
-  color: #5a2a00;
-}
-
-.tilt-title {
-  font-size: 28px;
-  margin-bottom: 5px;
-}
-
-.tilt-subtitle {
-  font-size: 16px;
-  opacity: 0.8;
-}
-
-.tilt-area {
-  margin: 20px auto;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle at center, #fff8e8, #ffe4c7);
-  border-radius: 20px;
+  padding: 10px;
+  font-family: "Comic Neue", "Quicksand", sans-serif;
+  color: #333;
   position: relative;
   overflow: hidden;
-  border: 3px solid #d2a15d;
-  box-shadow: 0 0 20px rgba(255, 180, 80, 0.6);
 }
 
-.ball {
+.find-title {
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+  color: #2c4a6e;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.find-sub {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: #375b85;
+}
+
+.find-scene {
+  width: 100%;
+  max-width: 900px;
+  height: 65vh;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Partículas */
+.particles-layer {
   position: absolute;
-  width: 50px;
-  height: 50px;
-  transition: transform 0.05s linear;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
-.goal {
+.snow-particle {
   position: absolute;
-  left: 210px;
-  top: 210px;
-  font-size: 34px;
-  animation: glow 1.2s infinite alternate ease-in-out;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
-@keyframes glow {
-  from {
-    text-shadow: 0 0 5px gold;
+/* Popup victoria */
+.congrats-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 25px 35px;
+  border-radius: 16px;
+  animation: popup 0.55s ease-out;
+  z-index: 999;
+  color: #2c4a6e;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+@keyframes popup {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -45%) scale(0.5);
   }
-  to {
-    text-shadow: 0 0 20px gold;
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
