@@ -23,11 +23,10 @@ export const NARRATIVAS = [
     lng: 2.355549, //2.364537,
     riddle:
       "Teneis que pasaros el globo entre todos sin que se caiga al suelo durante 30 segundos.",
-    game: "memory",
-    letra: "H",
+    game: "globos",
     narradorTexto:
       "Ah, aventurero… Aquí se guardan recuerdos ocultos del bosque mágico. Si consigues emparejar las imágenes correctas, liberarás un trocito de la magia del Tió.",
-    narradorAudio: memoryAudio,
+    narradorAudio: globosAudio,
     code: "ARBOL12",
   },
   {
@@ -37,11 +36,10 @@ export const NARRATIVAS = [
     lng: 2.355618,
     riddle:
       "Teneis coger al barquito usando la caña de pescar. Quien logre atraparlo una nueva pista desvelará",
-    game: "globos",
-    letra: "U",
+    game: "memory",
     narradorTexto:
       "Shhh… escucha bien. Los patos del estanque susurran pistas escondidas. Atrapa los globos correctos y descifrarás su secreto.",
-    narradorAudio: globosAudio,
+    narradorAudio: memoryAudio,
     code: "LIBRO",
   },
   {
@@ -52,7 +50,6 @@ export const NARRATIVAS = [
     riddle:
       "El árbol mágico esconde entre su tronco o ramas un gran secreto. ¡El Tió ha escondido una nota cerca que revela la clave! ¡Búscala!",
     game: "quiz",
-    letra: "E",
     narradorTexto:
       "Este viejo árbol ha visto pasar cientos de inviernos… y sólo comparte su sabiduría con quienes se atreven a escuchar. Responde a sus preguntas y te revelará otra parte de la magia del Tió.",
     narradorAudio: quizAudio,
@@ -64,12 +61,12 @@ export const NARRATIVAS = [
     lat: 41.663375,
     lng: 2.355762,
     riddle:
-      "Adivinad que teneis que hacer. Correcto, debeis cruzar todos el puente sin caeros al agua.",
+      "Cruzad el puente. Buscad y coged cada uno un papel. Al cruzar todos debeis intercambiar los papeles,  donde el explorador de mayor edad se queda el numero mayor, y el de menor edad el numero menor.",
     game: "puzzle",
-    letra: "R",
     narradorTexto:
       "Este pequeño puente conecta mundos… pero la magia está rota. Ordena las piezas desordenadas y devolverás su brillo, acercándonos un paso más al misterio final.",
-    narradorAudio: puzzleAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
+    narradorAudio: puzzleAudio,
+    code: "KLAUS",
   },
   {
     id: 5,
@@ -77,12 +74,12 @@ export const NARRATIVAS = [
     lat: 41.663139,
     lng: 2.356191,
     riddle:
-      "Antes de jugar, teneis que encontrar la piedra misteriosa y cruzar todos por debajo de la cuerda sin tocarla ni caer de culo al suelo",
+      "Antes de continuar debeis pasar todos por debajo de la cuerda sin caeros al suelo. Cuando hayas pasado todos buscad la nota que el Tió escondió en la piedra misteriosa.",
     game: "codigo",
-    letra: "T",
     narradorTexto:
       "Esta antigua piedra susurra códigos olvidados… Solo los aventureros más astutos pueden descifrarlos. Si logras resolver el mensaje, liberarás otro fragmento del poder del Tió.",
-    narradorAudio: codigoAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
+    narradorAudio: codigoAudio,
+    code: "PIEDRA",
   },
   {
     id: 6,
@@ -91,9 +88,9 @@ export const NARRATIVAS = [
     lng: 2.355687,
     riddle: "Las flores brillan cuando soplas… ¿Qué ocurrirá?",
     game: "soplar",
-    letra: "O",
     narradorTexto:
       "En este jardín encantado, las flores despiertan con la magia del aliento. Sopla con fuerza, con alegría, y deja que la naturaleza revele la última letra de nuestro gran secreto.",
-    narradorAudio: soplarAudio, // <-- ¡USAMOS LA VARIABLE IMPORTADA!
+    narradorAudio: soplarAudio,
+    code: "VIENTO",
   },
 ];

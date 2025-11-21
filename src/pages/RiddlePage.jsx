@@ -75,7 +75,7 @@ export default function RiddlePage() {
       <Narrador
         key={pista.narradorAudio}
         audioSrc={pista.narradorAudio}
-        texto={pista.narradorTexto}
+        texto=""
         onFinish={closeNarrador}
       />
     );
