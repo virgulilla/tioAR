@@ -1,145 +1,108 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLetras } from "../context/LetrasContext";
 import { usePistas } from "../context/PistasContext";
 import GameVictory from "../components/GameVictory";
-import * as Tone from "tone";
-import "./GameFind.css"; // 🎨 Restaurada la importación del CSS
+import tioImg from "../assets/find/tio_ball.png";
+import "./GameFind.css";
 
-import bg from "../assets/find/bg.png"; // 🖼️ Restaurada la importación de tu imagen local
-
-// Configuración de audio (Tone.js)
-const foundSynth = new Tone.MembraneSynth({
-  pitchDecay: 0.05,
-  octaves: 2,
-  envelope: {
-    attack: 0.001,
-    decay: 0.3,
-    sustain: 0.0,
-    release: 0.1,
-  },
-}).toDestination();
-
-const playFound = () => {
-  Tone.start();
-  foundSynth.triggerAttackRelease("G4", "8n");
-};
-
-// 🎁 ELEMENTOS NAVIDEÑOS A ENCONTRAR (Hotspots con posiciones)
-const CHRISTMAS_ITEMS = [
-  {
-    id: 1,
-    icon: "🎁",
-    style: { left: "30%", top: "75%", zIndex: 2 },
-    found: false,
-  },
-  {
-    id: 2,
-    icon: "🔔",
-    style: { left: "78%", top: "50%", zIndex: 1 },
-    found: false,
-  },
-  {
-    id: 3,
-    icon: "🎄",
-    style: { left: "15%", top: "20%", zIndex: 3 },
-    found: false,
-  },
-];
-
-export default function GameFind({ letra = "E" }) {
-  const [foundItems, setFoundItems] = useState(
-    CHRISTMAS_ITEMS.map((item) => ({ ...item, found: false, animating: false }))
-  );
-  const [showVictory, setShowVictory] = useState(false);
-  const [isClickBlocked, setIsClickBlocked] = useState(false);
+export default function GameFind({ letra = "R" }) {
   const navigate = useNavigate();
-
   const { addLetra } = useLetras();
   const { nextPista } = usePistas();
 
+  const areaRef = useRef(null);
+
+  const [pos, setPos] = useState({ x: 20, y: 20 });
+  const [vel, setVel] = useState({ x: 0, y: 0 });
+  const [won, setWon] = useState(false);
+
+  // Sensibilidad ajustable
+  const SENSIBILITY = 0.25; // baja para que sea más controlable
+
   useEffect(() => {
-    Tone.start();
+    function handleOrientation(e) {
+      let lr = e.gamma || 0; // izquierda/derecha
+      let fb = e.beta || 0; // adelante/atrás
+
+      setVel({
+        x: lr * SENSIBILITY,
+        y: fb * SENSIBILITY,
+      });
+    }
+
+    window.addEventListener("deviceorientation", handleOrientation, true);
+
+    return () =>
+      window.removeEventListener("deviceorientation", handleOrientation);
   }, []);
 
-  // Comprobar si todos los ítems han sido encontrados
+  // Movimiento continuo del Tió
   useEffect(() => {
-    if (foundItems.every((item) => item.found) && foundItems.length > 0) {
-      setTimeout(() => {
-        setShowVictory(true);
-      }, 1000);
+    function loop() {
+      setPos((p) => {
+        const area = areaRef.current;
+        if (!area) return p;
+
+        const maxX = area.clientWidth - 50;
+        const maxY = area.clientHeight - 50;
+
+        const newX = p.x + vel.x;
+        const newY = p.y + vel.y;
+
+        // Evitar que traspase bordes
+        const safeX = Math.max(0, Math.min(newX, maxX));
+        const safeY = Math.max(0, Math.min(newY, maxY));
+
+        return { x: safeX, y: safeY };
+      });
+
+      requestAnimationFrame(loop);
     }
-  }, [foundItems]);
 
-  function handleItemClick(id) {
-    if (isClickBlocked) return;
+    loop();
+  }, [vel]);
 
-    const itemToFind = foundItems.find((item) => item.id === id);
-    if (itemToFind.found || itemToFind.animating) {
-      return;
+  // Detección de objetivo
+  useEffect(() => {
+    const goalX = 210;
+    const goalY = 210;
+
+    const dx = pos.x - goalX;
+    const dy = pos.y - goalY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < 35 && !won) {
+      setWon(true);
     }
-
-    playFound();
-
-    setIsClickBlocked(true);
-
-    setFoundItems((prevItems) =>
-      prevItems.map((item) => {
-        if (item.id === id && !item.found) {
-          return { ...item, animating: true };
-        }
-        return item;
-      })
-    );
-
-    setTimeout(() => {
-      setFoundItems((prevItems) =>
-        prevItems.map((item) => {
-          if (item.id === id && item.animating) {
-            return { ...item, found: true, animating: false };
-          }
-          return item;
-        })
-      );
-      setIsClickBlocked(false);
-    }, 800);
-  }
+  }, [pos, won]);
 
   function handleVictoryContinue() {
     addLetra(letra);
     nextPista();
-    navigate("/");
+    navigate("/final");
   }
 
-  if (showVictory) {
+  if (won) {
     return <GameVictory letra={letra} onContinue={handleVictoryContinue} />;
   }
 
   return (
-    <div className="find-container">
-      <h1>¡Encuentra los objetos navideños!</h1>
-      <p>Toca los 3 secretos escondidos.</p>
-      <div className="find-area">
-        {/* 🖼️ Usando la importación de bg.png */}
+    <div className="tilt-container">
+      <h1 className="tilt-title">Equilibra el Tió</h1>
+      <p className="tilt-subtitle">
+        Inclina el móvil para llevarlo hasta la estrella ✨
+      </p>
+
+      <div className="tilt-area" ref={areaRef}>
+        <div className="goal">✨</div>
+
         <img
-          src={bg}
-          className="find-bg-img"
-          alt="Fondo de búsqueda navideño"
+          src={tioImg}
+          alt="Tió"
+          className="ball"
+          style={{ transform: `translate(${pos.x}px, ${pos.y}px)` }}
         />
-        {foundItems.map(
-          (item) =>
-            (!item.found || item.animating) && (
-              <button
-                key={item.id}
-                className={`find-item ${item.animating ? "animate-found" : ""}`}
-                style={item.style}
-                onClick={() => handleItemClick(item.id)}
-                disabled={isClickBlocked}
-              >
-                {item.icon}
-              </button>
-            )
-        )}
       </div>
     </div>
   );
