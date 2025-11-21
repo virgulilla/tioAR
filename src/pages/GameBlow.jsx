@@ -14,46 +14,55 @@ export default function GameBlow({ letra = "U" }) {
   const nav = useNavigate();
 
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-      const ctx = new AudioContext();
-      const mic = ctx.createMediaStreamSource(stream);
+    navigator.mediaDevices
+      .getUserMedia({
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false, // si el móvil lo permite, genial
+        },
+      })
+      .then((stream) => {
+        const ctx = new AudioContext();
+        const mic = ctx.createMediaStreamSource(stream);
 
-      // 1️⃣ Filtro paso alto para eliminar voces graves
-      const highpass = ctx.createBiquadFilter();
-      highpass.type = "highpass";
-      highpass.frequency.value = 1200; // soplido = frecuencias altas
+        // FILTRO DE ALTAS FRECUENCIAS (solo deja pasar soplido real)
+        const highpass = ctx.createBiquadFilter();
+        highpass.type = "highpass";
+        highpass.frequency.value = 4000; // las "esses" del soplido están aquí
 
-      const analyser = ctx.createAnalyser();
-      analyser.fftSize = 256;
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 512;
 
-      mic.connect(highpass);
-      highpass.connect(analyser);
+        mic.connect(highpass);
+        highpass.connect(analyser);
 
-      const data = new Uint8Array(analyser.frequencyBinCount);
+        const data = new Uint8Array(analyser.frequencyBinCount);
 
-      const BOOST = 1.8; // Multiplicador de sensibilidad
-      const THRESHOLD = 12; // Umbral más bajo
+        let smoothed = 0;
+        const IMPULSE_THRESHOLD = 75; // pico de soplido
+        const RISE_SPEED = 0.02; // velocidad de llenado
+        const DECAY = 0.92; // evita falsos positivos
 
-      function loop() {
-        analyser.getByteFrequencyData(data);
+        function loop() {
+          analyser.getByteFrequencyData(data);
 
-        // 🔥 medir energía EN FRECUENCIAS ALTAS (soplidos)
-        const highFreqEnergy =
-          data
-            .slice(30) // Ignorar bajas frecuencias (voz)
-            .reduce((a, b) => a + b, 0) / 10;
+          // energía SOLO en frecuencias super altas = soplido
+          const highEnergy =
+            data.slice(50, 120).reduce((a, b) => a + b, 0) / 70;
 
-        const vol = highFreqEnergy * BOOST;
+          // suavizado (para eliminar ruido constante del micro)
+          smoothed = smoothed * DECAY + highEnergy * (1 - DECAY);
 
-        if (vol > THRESHOLD) {
-          setPower((p) => Math.min(100, p + vol / 25));
+          // solo cuenta SI EL PICO SUPERA EL SUAVIZADO → soplido real
+          if (highEnergy - smoothed > IMPULSE_THRESHOLD) {
+            setPower((p) => Math.min(100, p + highEnergy * RISE_SPEED));
+          }
+
+          requestAnimationFrame(loop);
         }
-
-        requestAnimationFrame(loop);
-      }
-
-      loop();
-    });
+        loop();
+      });
   }, []);
 
   useEffect(() => {
